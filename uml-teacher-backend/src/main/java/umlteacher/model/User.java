@@ -1,4 +1,11 @@
 package umlteacher.model;
 
-public interface User {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@AllArgsConstructor
+@Data
+public abstract class User {
+
+    private String name;
 }
