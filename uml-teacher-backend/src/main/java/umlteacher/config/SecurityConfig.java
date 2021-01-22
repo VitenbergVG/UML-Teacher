@@ -10,14 +10,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import umlteacher.service.dao.UserServiceImpl;
 
-/**
- * Docs: https://habr.com/ru/post/482552/
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserServiceImpl userService;
+
     @Autowired
-    UserServiceImpl userService;
+    public SecurityConfig(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -26,29 +28,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf()
-                .disable()
+        httpSecurity.cors().and()
+                .csrf().disable()
                 .authorizeRequests()
-                //Доступ только для не зарегистрированных пользователей
-                .antMatchers("/authorization/**").not().fullyAuthenticated()
-                //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").hasRole("USER")
-                //Доступ разрешен всем пользователям
-                .antMatchers("/").permitAll()
-                //Все остальные страницы требуют аутентификации
+                .antMatchers("/authorization/**").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/**").hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().authenticated()
-                .and()
-                //Настройка для входа в систему
-                .formLogin()
-                .loginPage("/login")
-                //Перенарпавление на главную страницу после успешного входа
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll()
-                .logoutSuccessUrl("/");
+                .and().httpBasic();
     }
 
     @Autowired
