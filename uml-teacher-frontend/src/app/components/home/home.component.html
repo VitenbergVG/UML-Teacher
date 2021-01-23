@@ -1,0 +1,53 @@
+<div class="home-container">
+  <div class="home-container__left">
+    <div class="home-section __greeting">
+      <span class="text__major _middle">Hello User!</span>
+      <span>It’s good to see you again.</span>
+    </div>
+
+    <div class="home-section __current-test">
+      You are not currently taking courses. Please select from the list below, a suitable course.
+    </div>
+
+    <div class="text__major _regular">Courses</div>
+
+    <nav>
+      <div class="nav nav-tabs text__major _small" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="all-courses-tab" data-toggle="tab" href="#all-courses" role="tab"
+          aria-controls="all-courses" aria-selected="true">All courses</a>
+        <a class="nav-item nav-link" id="the-newest-tab" data-toggle="tab" href="#the-newest" role="tab"
+          aria-controls="the-newest" aria-selected="false">The Newest</a>
+        <a class="nav-item nav-link" id="top-rated-tab" data-toggle="tab" href="#top-rated" role="tab"
+          aria-controls="top-rated" aria-selected="false">Top Rated</a>
+        <a class="nav-item nav-link" id="most-popular-tab" data-toggle="tab" href="#most-popular" role="tab"
+          aria-controls="most-popular" aria-selected="false">Most Popular</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="all-courses" role="tabpanel" aria-labelledby="all-courses-tab">All
+      </div>
+      <div class="tab-pane fade" id="the-newest" role="tabpanel" aria-labelledby="the-newest-tab">Newest</div>
+      <div class="tab-pane fade" id="top-rated" role="tabpanel" aria-labelledby="top-rated-tab">Rated</div>
+      <div class="tab-pane fade" id="most-popular" role="tabpanel" aria-labelledby="most-popular-tab">Popular</div>
+    </div>
+
+  </div>
+  <div class="home-container__right">
+    <div class="d-flex flex-row functional-header">
+      <form class="form-inline">
+        <input class="form-control mr-sm-2 home-section __search" type="text" placeholder="Search" aria-label="Search">
+      </form>
+    </div>
+    <div class="d-flex flex-row">
+      <div class="home-section __courses-quantity">
+        <span class="text__major _large">11</span> 
+        <span>Courses completed</span>
+      </div>
+      <div class="home-section __courses-quantity">
+        <span class="text__major _large">4</span> 
+        <span>Courses in progress</span>
+      </div>
+    </div>
+
+  </div>
+</div>

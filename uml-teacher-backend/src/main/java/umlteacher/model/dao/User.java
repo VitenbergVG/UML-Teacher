@@ -18,7 +18,7 @@ public class User implements UserDetails {
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "user_id", length = 4, nullable = false)
-    private int id;
+    private Long id;
 
     @Column(name = "user_username", length = 30, nullable = false)
     private String username;

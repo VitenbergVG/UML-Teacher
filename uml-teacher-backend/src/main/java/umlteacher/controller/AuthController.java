@@ -1,9 +1,8 @@
 package umlteacher.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import umlteacher.model.dao.User;
+import umlteacher.exceptions.AuthorizationException;
 import umlteacher.service.dao.UserServiceImpl;
 
 @RestController
@@ -19,12 +18,18 @@ public class AuthController {
     }
 
     @GetMapping("/sign-in")
-    public UserDetails getUser(String username, String password) {
-        return userService.loadUserByUsernameAndPassword(username, password);
+    public Long getUser(@RequestHeader("Authorization") String authorizationToken) throws AuthorizationException {
+        return userService.getUserIdByUsernameAndPassword(authorizationToken);
     }
 
     @PostMapping("/sign-up")
-    public boolean addUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    public Long addUser(@RequestHeader("AuthorizationToken") String authorizationToken,
+                        @RequestParam("fullname") String fullname) throws AuthorizationException {
+        return userService.saveUserAndGetId(authorizationToken, fullname);
+    }
+
+    @GetMapping({"/has-admin-role"})
+    public boolean userHasAdminRole(@RequestParam("userId") Long userId) throws AuthorizationException {
+        return userService.isAdmin(userId);
     }
 }

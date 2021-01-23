@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import umlteacher.exceptions.AuthorizationException;
+import umlteacher.exceptions.UserNotFoundException;
 import umlteacher.model.dao.Role;
 import umlteacher.model.dao.User;
 import umlteacher.repo.dao.RoleRepository;
@@ -13,6 +15,7 @@ import umlteacher.repo.dao.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,13 +44,21 @@ public class UserServiceImpl implements UserDetailsService {
         return user;
     }
 
-    public UserDetails loadUserByUsernameAndPassword(String username, String password)
-            throws UsernameNotFoundException {
+    public Long getUserIdByUsernameAndPassword(String authToken)
+            throws UsernameNotFoundException, AuthorizationException {
+        String decodedToken = new String(Base64.getDecoder()
+                .decode(authToken.replace("Basic ", "")));
+        String[] credentials = decodedToken.split(":");
+        String username = credentials[0];
+        String password = credentials[1];
         User user = (User) loadUserByUsername(username);
-        return user.getPassword().equals(bCryptPasswordEncoder.encode(password)) ? user : null;
+        if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            return user.getId();
+        }
+        throw new AuthorizationException("Incorrect password!");
     }
 
-    public User findUserById(Integer userId) {
+    public User findUserById(Long userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
         return userFromDb.orElse(new User());
     }
@@ -69,11 +80,51 @@ public class UserServiceImpl implements UserDetailsService {
         return true;
     }
 
-    public boolean deleteUser(Integer userId) {
+    public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
             return true;
         }
         return false;
+    }
+
+    public boolean isAdmin(Long userId) throws AuthorizationException {
+        User user = userRepository.findById(userId).orElse(null);
+        if (Objects.nonNull(user)) {
+            return user.getRole().getAuthority().equals("ADMIN");
+        }
+        throw new AuthorizationException("Couldn't get user role. User doesn't exists!");
+    }
+
+    public void changeRoleForUser(Long userId, String newRoleName) throws UserNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Couldn't get user. User doesn't exists!"));
+        if (Objects.nonNull(user)) {
+            user.setRole(roleRepository.findByName(newRoleName));
+            userRepository.saveAndFlush(user);
+        }
+    }
+
+    public Long saveUserAndGetId(String authToken, String fullname) throws AuthorizationException {
+        String decodedToken = new String(Base64.getDecoder()
+                .decode(authToken.replace("Basic ", "")));
+        String[] credentials = decodedToken.split(":");
+        String username = credentials[0];
+        String password = credentials[1];
+
+        User userFromDB = userRepository.findByUsername(username);
+        if (Objects.nonNull(userFromDB)) {
+            throw new AuthorizationException("Couldn't crete user. User already exists!");
+        }
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setFullname(fullname);
+        Role role = roleRepository.findByName("USER");
+        user.setRole(role);
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        userRepository.saveAndFlush(user);
+        return user.getId();
     }
 }

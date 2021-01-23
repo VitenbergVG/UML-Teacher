@@ -1,0 +1,56 @@
+.home-container {
+  display: flex;
+  margin-top: 56px;
+
+  &__left {
+    flex-grow: 1;
+    margin-right: 64px;
+  }
+
+  &__right {
+    margin-right: 52px;
+  }
+}
+
+.home-section {
+  justify-content: center;
+  border-radius: 14px;
+  background-color: #F5F5F7;
+
+  &.__greeting {
+    height: 160px;
+    margin-bottom: 24px;
+    padding-left: 32px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.__current-test {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    margin-bottom: 40px;
+  }
+
+  &.__courses-quantity {
+    display: flex;
+    align-items: center;
+    height: 96px;
+    width: 208px;
+    padding: 0 30px;
+    margin-right: 24px;
+
+    &:last-child {
+      margin-right: unset;
+    }
+  }
+
+  &.__search {
+    height: 40px;
+    width: 300px;
+  }
+}
+
+.functional-header {
+  margin-bottom: 24px;
+}
