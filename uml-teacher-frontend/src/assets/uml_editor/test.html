@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Grapheditor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="styles/grapheditor.css">
+    <script type="text/javascript">
+        mxBasePath = 'mxgraph/'
+    </script>
+    <script type="text/javascript" src="mxgraph/js/mxClient.js"></script>
+    <script type="text/javascript" src="js/Init.js"></script>
+    <script type="text/javascript" src="deflate/pako.min.js"></script>
+    <script type="text/javascript" src="deflate/base64.js"></script>
+    <script type="text/javascript" src="jscolor/jscolor.js"></script>
+    <script type="text/javascript" src="sanitizer/sanitizer.min.js"></script>
+    <script type="text/javascript" src="mxgraph/mxClient.js"></script>
+    <script type="text/javascript" src="js/EditorUi.js"></script>
+    <script type="text/javascript" src="js/Editor.js"></script>
+    <script type="text/javascript" src="js/Sidebar.js"></script>
+    <script type="text/javascript" src="js/Graph.js"></script>
+    <script type="text/javascript" src="js/Format.js"></script>
+    <script type="text/javascript" src="js/Shapes.js"></script>
+    <script type="text/javascript" src="js/Actions.js"></script>
+    <script type="text/javascript" src="js/Menus.js"></script>
+    <script type="text/javascript" src="js/Toolbar.js"></script>
+    <script type="text/javascript" src="js/Dialogs.js"></script>
+</head>
+
+<body class="geEditor">
+    <script type="text/javascript">
+        var key = ""
+        var editorUi
+        
+        const queryString = window.location.search
+        const urlParams = new URLSearchParams(queryString)
+        if (urlParams.has("key")) {
+            key = urlParams.get("key")
+        }
+
+        mxResources.loadDefaultBundle = false;
+        var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
+            mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
+
+        mxUtils.getAll([bundle, STYLE_PATH + '/default.xml', ], function (xhr) {
+            mxResources.parse(xhr[0].getText());
+
+            var themes = new Object();
+            themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
+
+            editorUi = new EditorUi(new Editor(urlParams.has('view'), themes));
+
+            editorUi.editor.filename = key
+            
+        })
+
+
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', "http://localhost:8080/uml/" + key)
+        xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:admin"))
+        xhr.onload = function() {
+            const xml = xhr.response
+            if (xml) {
+                var xmlElem = mxUtils.parseXml(atob(decodeURIComponent(xml))).documentElement;
+                editorUi.editor.setGraphXml(xmlElem);
+            }
+        }
+        xhr.send()
+
+
+        function saveUml(file) {
+            xhr = new XMLHttpRequest()
+            xhr.open('POST', "http://localhost:8080/uml/" + key)
+            xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:admin"))
+            xhr.send(file)
+        }
+        
+    </script>
+</body>
+</html>
