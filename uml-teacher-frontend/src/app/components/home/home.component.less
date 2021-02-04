@@ -23,7 +23,7 @@
     width: 100%;
     margin: 32px 0 24px;
     padding-left: 32px;
-    
+
     &-image {
       position: absolute;
     }
@@ -31,8 +31,16 @@
 
   &.__current-test {
     align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
     height: 80px;
-    margin-bottom: 40px;
+    margin-right: 24px;
+
+    &-container {
+      justify-content: unset;
+      align-items: center;
+      margin-bottom: 40px;
+    }
   }
 
   &.__courses-quantity {
@@ -70,4 +78,46 @@
 .tab-content {
   max-height: calc(100vh - 440px);
   overflow: auto;
+}
+
+.course-card {
+
+  &__image-container {
+    height: fit-content;
+    margin: 0 24px 0 8px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  &__name {
+    height: fit-content;
+
+    &-container {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__button {
+    margin: 0 24px 0 38px;
+  }
+
+  &__external-button {
+    cursor: pointer;
+    margin-right: 16px;
+
+    &:last-child {
+      margin-right: unset;
+    }
+
+    &-container {
+      width: 101px;
+    }
+  }
+
+  &__no-courses {
+    width: 100%;
+    text-align: center;
+  }
 }
