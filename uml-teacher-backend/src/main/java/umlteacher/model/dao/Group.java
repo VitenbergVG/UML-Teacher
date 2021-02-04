@@ -1,7 +1,12 @@
 package umlteacher.model.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,6 +15,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "groups")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Group {
 
     @Id
@@ -24,7 +30,7 @@ public class Group {
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "current_course_id", nullable = false)
     private Course currentCourse;
-
+    
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "first_teacher_id", nullable = false)
     private Employee firstTeacher;

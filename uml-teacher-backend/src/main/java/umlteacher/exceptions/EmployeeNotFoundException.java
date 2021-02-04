@@ -1,8 +1,15 @@
 package umlteacher.exceptions;
 
-public class EmployeeNotFoundException extends Exception {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-    public EmployeeNotFoundException() {
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class EmployeeNotFoundException extends RuntimeException {
+
+    public EmployeeNotFoundException() {}
+    
+    public EmployeeNotFoundException(int id) {
+    	super("Employee not found by employee_id " + id);
     }
 
     public EmployeeNotFoundException(String message) {

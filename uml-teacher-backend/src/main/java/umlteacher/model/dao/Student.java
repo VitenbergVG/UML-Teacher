@@ -1,8 +1,12 @@
 package umlteacher.model.dao;
 
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,6 +15,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "student")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Student {
 
     @Id
@@ -35,5 +40,6 @@ public class Student {
             joinColumns = {@JoinColumn(name = "student_id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id")}
     )
+    @JsonIgnore
     private Set<Group> groups;
 }

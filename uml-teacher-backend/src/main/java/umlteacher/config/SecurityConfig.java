@@ -8,11 +8,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import umlteacher.service.dao.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private final UserServiceImpl userService;
 
@@ -36,12 +39,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authorization/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/**").hasAnyAuthority("ADMIN", "USER")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and().httpBasic();
     }
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
+    }
+    
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+    	registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
     }
 }
