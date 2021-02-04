@@ -1,0 +1,4 @@
+export enum CourseSortingType {
+    ALL_COURSES = 'ALL_COURSES', THE_NEWEST = 'THE_NEWEST', 
+    TOP_RATED = 'TOP_RATED', MOST_POPULAR = 'MOST_POPULAR'
+}
