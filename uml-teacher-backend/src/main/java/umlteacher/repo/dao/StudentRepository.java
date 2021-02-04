@@ -19,5 +19,4 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 	
 	@Query(value = "SELECT * FROM student WHERE student_id = ANY(?1)", nativeQuery = true)
 	Set<Student> findByIds(int[] student_ids);
-
 }

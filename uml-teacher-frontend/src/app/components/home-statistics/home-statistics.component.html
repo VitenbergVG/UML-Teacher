@@ -1,0 +1,27 @@
+<div class="text__major _regular">Your statistics</div>
+
+<nav>
+  <div class="nav nav-tabs text__major _small" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="learning-hours-tab" data-toggle="tab" href="#learning-hours" role="tab"
+      aria-controls="learning-hours" aria-selected="true">Learning Hours</a>
+    <a class="nav-item nav-link" id="my-courses-tab" data-toggle="tab" href="#my-courses" role="tab"
+      aria-controls="my-courses" aria-selected="false">My Courses</a>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="learning-hours" role="tabpanel" aria-labelledby="learning-hours-tab">
+    <div class="chart-wrapper">
+      <canvas baseChart 
+          [datasets]="lineChartData" 
+          [labels]="lineChartLabels" 
+          [options]="lineChartOptions"
+          [colors]="lineChartColors" 
+          [legend]="false" 
+          [chartType]="'line'">
+      </canvas>
+  </div>
+  </div>
+  <div class="tab-pane fade" id="my-courses" role="tabpanel" aria-labelledby="my-courses-tab">
+    My coursess
+  </div>
+</div>

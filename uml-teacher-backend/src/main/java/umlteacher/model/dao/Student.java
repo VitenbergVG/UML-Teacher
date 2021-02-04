@@ -1,8 +1,8 @@
 package umlteacher.model.dao;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "student")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -40,5 +41,5 @@ public class Student {
             inverseJoinColumns = {@JoinColumn(name = "group_id")}
     )
     @JsonIgnore
-    @EqualsAndHashCode.Exclude private Set<Group> groups;
+    private Set<Group> groups;
 }
