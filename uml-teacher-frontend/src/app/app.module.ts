@@ -10,13 +10,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { UmlTeacherComponentsModule } from './components/uml-teacher-components.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ChartsModule } from 'ng2-charts';
+import { DurationPipe } from './components/course-preveiw-card/duration.pipe';
 
 @NgModule({
   declarations: [
     AppComponent, NavbarComponent
   ],
   imports: [
-    CommonModule, BrowserModule, RouterModule, FormsModule, HttpClientModule, AppRoutingModule, UmlTeacherComponentsModule
+    CommonModule, BrowserModule, RouterModule, FormsModule, HttpClientModule, AppRoutingModule, UmlTeacherComponentsModule,
+    ChartsModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

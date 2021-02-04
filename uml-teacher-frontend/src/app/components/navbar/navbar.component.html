@@ -1,7 +1,7 @@
 <nav class="navbar__container">
   <div class="navbar__logo text__major _large">F.</div>
 
-  <ng-container *ngIf="route.snapshot.firstChild?.routeConfig.path === 'login'">
+  <ng-container *ngIf="route.snapshot.firstChild?.routeConfig.path === 'login'; else defaultNavigation">
     <button class="navbar__button" (click)="authService.emitSignUpModeSubjectChanged(true)">
       <svg *ngIf="!isSignUpMode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="26px"
         height="26px">
@@ -17,8 +17,8 @@
       </svg>
     </button>
     <button class="navbar__button" (click)="authService.emitSignUpModeSubjectChanged(false)">
-      <svg *ngIf="isSignUpMode" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" fill="white"
-        width="26px" height="26px">
+      <svg *ngIf="isSignUpMode" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"
+        fill="white" width="26px" height="26px">
         <g>
           <rect fill="none" height="24" width="24" />
         </g>
@@ -27,8 +27,8 @@
             d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z" />
         </g>
       </svg>
-      <svg *ngIf="!isSignUpMode" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" fill="white"
-        width="26px" height="26px">
+      <svg *ngIf="!isSignUpMode" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"
+        viewBox="0 0 24 24" fill="white" width="26px" height="26px">
         <g>
           <rect fill="none" height="24" width="24" />
           <rect fill="none" height="24" width="24" />
@@ -41,5 +41,12 @@
     </button>
   </ng-container>
 
-
+  <ng-template #defaultNavigation>
+    <a class="navbar__button _home" routerLink="/home" routerLinkActive="active"></a>
+    <a class="navbar__button _study" routerLink="/study" routerLinkActive="active"></a>
+    <a class="navbar__button _profile" routerLink="/profile" routerLinkActive="active"></a>
+    <a class="navbar__button _messanger" routerLink="/messanger" routerLinkActive="active"></a>
+    <a class="navbar__button _settings" routerLink="/settings" routerLinkActive="active"></a>
+    <a class="navbar__button _logout" routerLink="/login" routerLinkActive="active"></a>
+  </ng-template>
 </nav>

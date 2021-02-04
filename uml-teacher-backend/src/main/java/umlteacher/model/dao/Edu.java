@@ -1,6 +1,7 @@
 package umlteacher.model.dao;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "edu")
+@NoArgsConstructor
 public class Edu {
 
     @Id

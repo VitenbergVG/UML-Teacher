@@ -1,34 +1,43 @@
 <div class="home-container">
   <div class="home-container__left">
-    <div class="home-section __greeting">
-      <span class="text__major _middle">Hello User!</span>
-      <span>It’s good to see you again.</span>
+    <div class="home-section __greeting-wrapper _transparent">
+      <div class="home-section __greeting">
+        <div class="d-flex flex-column justify-content-center">
+          <div class="text__major _middle">Hello User!</div>
+          <div>It’s good to see you again.</div>
+        </div>
+      </div>
+      <img class="home-section __greeting-image _transparent" src="assets\icons\Illustration.svg">
     </div>
 
     <div class="home-section __current-test">
-      You are not currently taking courses. Please select from the list below, a suitable course.
+      <ng-container *ngIf="currentCourses; else noCurrentCourses">
+        {{currentCourses[0].name}}
+      </ng-container>
     </div>
+
+    <ng-template #noCurrentCourses>
+      You are not currently taking courses. Please select from the list below, a suitable course.
+    </ng-template>
 
     <div class="text__major _regular">Courses</div>
 
     <nav>
       <div class="nav nav-tabs text__major _small" id="nav-tab" role="tablist">
         <a class="nav-item nav-link active" id="all-courses-tab" data-toggle="tab" href="#all-courses" role="tab"
-          aria-controls="all-courses" aria-selected="true">All courses</a>
+          aria-controls="all-courses" aria-selected="true" (click)="currentCourseSortingType = 'ALL_COURSES'">All Courses</a>
         <a class="nav-item nav-link" id="the-newest-tab" data-toggle="tab" href="#the-newest" role="tab"
-          aria-controls="the-newest" aria-selected="false">The Newest</a>
+          aria-controls="the-newest" aria-selected="false" (click)="currentCourseSortingType = 'THE_NEWEST'">The Newest</a>
         <a class="nav-item nav-link" id="top-rated-tab" data-toggle="tab" href="#top-rated" role="tab"
-          aria-controls="top-rated" aria-selected="false">Top Rated</a>
+          aria-controls="top-rated" aria-selected="false" (click)="currentCourseSortingType = 'TOP_RATED'">Top Rated</a>
         <a class="nav-item nav-link" id="most-popular-tab" data-toggle="tab" href="#most-popular" role="tab"
-          aria-controls="most-popular" aria-selected="false">Most Popular</a>
+          aria-controls="most-popular" aria-selected="false" (click)="currentCourseSortingType = 'MOST_POPULAR'">Most Popular</a>
       </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="all-courses" role="tabpanel" aria-labelledby="all-courses-tab">All
-      </div>
-      <div class="tab-pane fade" id="the-newest" role="tabpanel" aria-labelledby="the-newest-tab">Newest</div>
-      <div class="tab-pane fade" id="top-rated" role="tabpanel" aria-labelledby="top-rated-tab">Rated</div>
-      <div class="tab-pane fade" id="most-popular" role="tabpanel" aria-labelledby="most-popular-tab">Popular</div>
+      <ng-container *ngFor="let course of courses | sortBy : currentCourseSortingType">
+        <course-preveiw-card [course]="course"></course-preveiw-card>
+      </ng-container>
     </div>
 
   </div>
@@ -40,14 +49,17 @@
     </div>
     <div class="d-flex flex-row">
       <div class="home-section __courses-quantity">
-        <span class="text__major _large">11</span> 
+        <span class="text__major _large">5</span>
         <span>Courses completed</span>
       </div>
       <div class="home-section __courses-quantity">
-        <span class="text__major _large">4</span> 
+        <span class="text__major _large">{{currentCourses?.length || 0}}</span>
         <span>Courses in progress</span>
       </div>
     </div>
 
+    <div class="home-section __statistics _transparent">
+      <home-statistics></home-statistics>
+    </div>
   </div>
 </div>

@@ -20,13 +20,60 @@
   }
 
   &__button {
-    width: fit-content;
+    width: 26px;
+    height: 26px;
     background: transparent;
     border-color: transparent;
     margin-bottom: 15px;
 
     &:last-child {
       margin-bottom: unset;
+    }
+
+    &._home {
+      background-image: url("../../../assets/icons/home-white-18dp outlined.svg");
+
+      &.active {
+        background-image: url("../../../assets/icons/home-white-18dp.svg");
+      }
+    }
+
+    &._study {
+      background-image: url("../../../assets/icons/school-white-18dp.svg");
+
+      &.active {
+        background-image: url("../../../assets/icons/school-white-18dp active.svg");
+      }
+    }
+
+    &._profile {
+      background-image: url("../../../assets/icons/perm_identity-white-18dp.svg");
+
+      &.active {
+        background-image: url("../../../assets/icons/perm_identity-white-18dp active.svg");
+      }
+    }
+
+    &._messanger {
+      background-image: url("../../../assets/icons/email-white-18dp.svg");
+
+      &.active {
+        background-image: url("../../../assets/icons/email-white-18dp active.svg");
+      }
+    }
+
+    &._settings {
+      background-image: url("../../../assets/icons/settings-white-18dp.svg");
+
+      &.active {
+        background-image: url("../../../assets/icons/settings-white-18dp active.svg");
+      }
+    }
+
+    &._logout {
+      position: absolute;
+      bottom: 64px;
+      background-image: url("../../../assets/icons/logout-white-18dp.svg");
     }
   }
 }
