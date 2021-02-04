@@ -18,7 +18,6 @@ import javax.persistence.PersistenceContext;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserDetailsService {
@@ -59,8 +58,10 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
     public User findUserById(Long userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
+        User user = userRepository.findById(userId).orElse(null);
+        if (Objects.isNull(user))
+        	throw new UserNotFoundException(userId);
+        return user;
     }
 
     public List<User> getAllUsers() {
@@ -114,7 +115,7 @@ public class UserServiceImpl implements UserDetailsService {
 
         User userFromDB = userRepository.findByUsername(username);
         if (Objects.nonNull(userFromDB)) {
-            throw new AuthorizationException("Couldn't crete user. User already exists!");
+            throw new AuthorizationException("Couldn't create user. User already exists!");
         }
 
         User user = new User();
