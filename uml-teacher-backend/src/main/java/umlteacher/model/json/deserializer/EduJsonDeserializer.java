@@ -25,7 +25,7 @@ public class EduJsonDeserializer extends JsonDeserializer<Edu> {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = mapper.readTree(p);
 		
-		String field = "edu_id";
+		String field = "eduId";
 		JsonNode value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -34,7 +34,7 @@ public class EduJsonDeserializer extends JsonDeserializer<Edu> {
 		} else
 			throw new MissingFieldException(field, "Edu");
 
-		field = "edu_name";
+		field = "eduName";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))

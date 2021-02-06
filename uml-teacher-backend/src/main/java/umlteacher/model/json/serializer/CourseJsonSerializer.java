@@ -15,11 +15,11 @@ public class CourseJsonSerializer extends JsonSerializer<Course> {
 	@Override
 	public void serialize(Course value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();
-		gen.writeStringField("course_id", value.getId() + "");
-		gen.writeStringField("course_name", value.getName());
-		gen.writeStringField("created_date", value.getDate().toString());
-		gen.writeStringField("rating", value.getRating() == null ? null : value.getRating().toString());
-		gen.writeStringField("time_to_complete", value.getTime().toString());
+		gen.writeNumberField("courseId", value.getId());
+		gen.writeStringField("courseName", value.getName());
+		gen.writeStringField("createdDate", value.getDate().toString());
+		gen.writeNumberField("rating", value.getRating() == null ? null : value.getRating());
+		gen.writeStringField("timeToComplete", value.getTime().toString());
 		gen.writeEndObject();
 	}
 }

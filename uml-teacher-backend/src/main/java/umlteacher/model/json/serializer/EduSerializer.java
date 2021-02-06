@@ -16,8 +16,8 @@ public class EduSerializer extends JsonSerializer<Edu> {
 	@Override
 	public void serialize(Edu value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();
-		gen.writeStringField("edu_id", value.getId() + "");
-		gen.writeStringField("edu_name", value.getName());
+		gen.writeNumberField("eduId", value.getId());
+		gen.writeStringField("eduName", value.getName());
 		gen.writeEndObject();
 	}
 
