@@ -32,7 +32,7 @@ public class GroupJsonDeserializer extends JsonDeserializer<Group> {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = mapper.readTree(p);
 
-		String field = "group_id";
+		String field = "groupId";
 		JsonNode value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -41,7 +41,7 @@ public class GroupJsonDeserializer extends JsonDeserializer<Group> {
 		} else
 			throw new MissingFieldException(field, "Group");
 
-		field = "group_name";
+		field = "groupName";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -50,7 +50,7 @@ public class GroupJsonDeserializer extends JsonDeserializer<Group> {
 		} else
 			throw new MissingFieldException(field, "Group");
 
-		field = "current_course_id";
+		field = "currentCourseId";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -59,7 +59,7 @@ public class GroupJsonDeserializer extends JsonDeserializer<Group> {
 		} else
 			throw new MissingFieldException(field, "Group");
 
-		field = "first_teacher_id";
+		field = "firstTeacherId";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -68,7 +68,7 @@ public class GroupJsonDeserializer extends JsonDeserializer<Group> {
 		} else
 			throw new MissingFieldException(field, "Group");
 
-		field = "second_teacher_id";
+		field = "secondTeacherId";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (!value.toString().equals("null"))

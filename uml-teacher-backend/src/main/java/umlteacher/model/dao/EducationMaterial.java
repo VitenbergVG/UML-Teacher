@@ -1,12 +1,15 @@
 package umlteacher.model.dao;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "edumat")
 public class EducationMaterial {
@@ -26,8 +29,4 @@ public class EducationMaterial {
             inverseJoinColumns = {@JoinColumn(name = "course_id")}
     )
     private Set<Course> courses;
-
-    public EducationMaterial(String path) {
-        this.path = path;
-    }
 }

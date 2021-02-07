@@ -27,7 +27,7 @@ public class CourseJsonDeserializer extends JsonDeserializer<Course> {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = mapper.readTree(p);
 		
-		String field = "course_id";
+		String field = "courseId";
 		JsonNode value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -36,7 +36,7 @@ public class CourseJsonDeserializer extends JsonDeserializer<Course> {
 		} else
 			throw new MissingFieldException(field, "Course");
 
-		field = "course_name";
+		field = "courseName";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -45,7 +45,7 @@ public class CourseJsonDeserializer extends JsonDeserializer<Course> {
 		} else
 			throw new MissingFieldException(field, "Course");
 		
-		field = "created_date";
+		field = "createdDate";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -61,7 +61,7 @@ public class CourseJsonDeserializer extends JsonDeserializer<Course> {
 				course.setName(value.asText());
 		}
 		
-		field = "time_to_complete";
+		field = "timeToComplete";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))

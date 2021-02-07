@@ -40,9 +40,6 @@ public class Course {
     @Column(name = "time_to_complete", nullable = false)
     private Duration time;
 
-    @Column(name = "time_to_complete", nullable = false, columnDefinition = "interval")
-    private Duration timeToComplete;
-
     @ManyToMany(mappedBy = "courses")
     private Set<Task> tasks;
 

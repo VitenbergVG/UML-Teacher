@@ -8,17 +8,16 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import umlteacher.model.dao.User;
+import umlteacher.model.dao.Task;
 
 @JsonComponent
-public class UserJsonSerializer extends JsonSerializer<User> {
+public class TaskJsonSerializer extends JsonSerializer<Task> {
 	
 	@Override
-	public void serialize(User value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+	public void serialize(Task value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();
-		gen.writeNumberField("userId", value.getId());
-		gen.writeStringField("fullname", value.getFullname());
-		gen.writeStringField("role", value.getRole().getName());
+		gen.writeNumberField("taskId", value.getId());
+		gen.writeStringField("path", value.getPath());
 		gen.writeEndObject();
 	}
 

@@ -32,7 +32,7 @@ public class StudentJsonDeserializer extends JsonDeserializer<Student> {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = mapper.readTree(p);
 
-		String field = "student_id";
+		String field = "studentId";
 		JsonNode value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -41,7 +41,7 @@ public class StudentJsonDeserializer extends JsonDeserializer<Student> {
 		} else
 			throw new MissingFieldException(field, "Student");
 
-		field = "user_id";
+		field = "userId";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -50,7 +50,7 @@ public class StudentJsonDeserializer extends JsonDeserializer<Student> {
 		} else
 			throw new MissingFieldException(field, "Student");
 
-		field = "edu_id";
+		field = "eduId";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
@@ -59,7 +59,7 @@ public class StudentJsonDeserializer extends JsonDeserializer<Student> {
 		} else
 			throw new MissingFieldException(field, "Student");
 
-		field = "user_contacts";
+		field = "userContacts";
 		value = root.get(field);
 		if (Objects.nonNull(value)) {
 			if (value.toString().equals("null"))
