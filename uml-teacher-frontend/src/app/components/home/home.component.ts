@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
   public currentCourses: CourseModel[];
   public currentCourseIndex: number = 0;
   public currentCourseSortingType: string = 'ALL_COURSES';
+  public completedCoursesQuantity: number;
 
   constructor(public educationalProcessService: EducationalProcessService) { }
 
@@ -21,5 +22,7 @@ export class HomeComponent implements OnInit {
       .subscribe(courses => this.courses = courses);
     this.educationalProcessService.getCurrentCourses()
       .subscribe(currentCourses => this.currentCourses = currentCourses);
+    this.educationalProcessService.getCompletedCourse()
+      .subscribe(completedCourses => this.completedCoursesQuantity = completedCourses.length);
   }
 }

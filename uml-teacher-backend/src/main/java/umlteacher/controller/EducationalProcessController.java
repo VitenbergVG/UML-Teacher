@@ -1,13 +1,10 @@
 package umlteacher.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import umlteacher.exceptions.AuthorizationException;
 import umlteacher.model.dao.Answer;
 import umlteacher.model.dao.Course;

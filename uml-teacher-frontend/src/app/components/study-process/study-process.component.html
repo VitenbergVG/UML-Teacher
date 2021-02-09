@@ -1,3 +1,54 @@
-<p>
-  study-process works!
-</p>
+<div class="study-process__container">
+  <div class="study-process__header">
+    <div class="study-process__current-task">
+      <div class="task-card__name-container">
+        <div class="task-card__image-container">
+          <img src="assets\icons\graph_icon.svg">
+        </div>
+        <div *ngIf="tasks && currentTaskId" class="task-card__name text__major _small">
+          Task {{tasks[currentTaskId].taskNumber}} | {{course.name}}
+        </div>
+      </div>
+      <div class="d-flex flex-row">
+        <circle-progress *ngIf="course" [percent]="course.complete">
+        </circle-progress>
+        <div class="task-card__external-button-container">
+          <a class="task-card__external-button" [style.cursor]="currentTaskId == 0 ? 'unset' : 'pointer'"
+            (click)="navigateToPrevTask(currentTaskId == 0)">
+            <img *ngIf="currentTaskId > 0" src="assets\icons\arrow-left.svg">
+            <img *ngIf="currentTaskId == 0" src="assets\icons\arrow-left_disabled.svg">
+          </a>
+          <a class="task-card__external-button"
+            [style.cursor]="currentTaskId == tasks?.length - 1 ? 'unset' : 'pointer'"
+            (click)="navigateToNextTask(currentTaskId == tasks?.length - 1)">
+            <img *ngIf="currentTaskId < tasks?.length - 1" src="assets\icons\arrow-right.svg">
+            <img *ngIf="currentTaskId == tasks?.length - 1" src="assets\icons\arrow-right_disabled.svg">
+          </a>
+        </div>
+      </div>
+    </div>
+    <form class="form-inline">
+      <input class="form-control mr-sm-2 study-process__search" type="text" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+  <ng-container *ngIf="tasks">
+    <div [ngSwitch]="tasks[currentTaskId].type">
+      <div *ngSwitchCase="'TEST'">
+        <div class="task-content__name text _large _bold">Task {{tasks[currentTaskId].taskNumber}}: Complete the
+          test</div>
+      </div>
+      <div *ngSwitchCase="'TEXT'">
+        <div class="task-content__name text _large _bold">Task {{tasks[currentTaskId].taskNumber}}: Answer the
+          question</div>
+        <div class="task-content__question text _large _bold">{{tasks[currentTaskId].question}}</div>
+        <form>
+          <input class="task-content__answer-field form-control" type="text" placeholder="Input your answer here">
+          <button class="btn btn-primary" (click)="confirmTextTask()">
+            Confirm
+          </button>
+        </form>
+      </div>
+      <div *ngSwitchCase="'GRAPHIC'"></div>
+    </div>
+  </ng-container>
+</div>

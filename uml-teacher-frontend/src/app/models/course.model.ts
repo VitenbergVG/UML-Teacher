@@ -8,6 +8,7 @@ export class CourseModel {
   createdDate: Date;
   rating: number;
   timeToComplete: string;
+  complete?: number;
   task: TaskModel[];
   educationMaterials: EducationMaterialModel[];
 }

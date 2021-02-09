@@ -1,0 +1,8 @@
+$QUESTION$
+gjrtjgjjgjjj
+
+$ANSWERS$
+a,b,llll,c,d
+
+$CORRECT_ANSWER$
+llll

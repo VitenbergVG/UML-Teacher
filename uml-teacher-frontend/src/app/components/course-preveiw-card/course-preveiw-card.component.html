@@ -8,7 +8,7 @@
     <div class="course-card__time-to-complete">{{course.timeToComplete | duration}}</div>
     <img class="course-card__icon" src="assets\icons\fire_icon.svg">
     <div class="course-card__rating">{{course.rating || '-'}}</div>
-    <button class="btn btn-primary course-card__button" (click)="null">
+    <button class="btn btn-primary course-card__button" (click)="viewCourse()">
       View course
     </button>
   </div>

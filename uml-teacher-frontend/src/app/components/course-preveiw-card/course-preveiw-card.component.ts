@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CourseModel } from 'src/app/models/course.model';
 
 @Component({
@@ -11,9 +12,13 @@ export class CoursePreveiwCardComponent implements OnInit {
   @Input()
   public course: CourseModel;
 
-  constructor() { }
+  constructor(private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
   }
 
+  viewCourse() {
+    this.router.navigate(['study/course', this.course.id, 'task', 0]);
+  }
 }
