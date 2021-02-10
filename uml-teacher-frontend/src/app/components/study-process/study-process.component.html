@@ -6,7 +6,7 @@
           <img src="assets\icons\graph_icon.svg">
         </div>
         <div *ngIf="tasks && currentTaskId" class="task-card__name text__major _small">
-          Task {{tasks[currentTaskId].taskNumber}} | {{course.name}}
+          Task {{tasks[currentTaskId].taskNumber}} | {{course?.name}}
         </div>
       </div>
       <div class="d-flex flex-row">
@@ -42,7 +42,7 @@
           question</div>
         <div class="task-content__question text _large _bold">{{tasks[currentTaskId].question}}</div>
         <form>
-          <input class="task-content__answer-field form-control" type="text" placeholder="Input your answer here">
+          <textarea class="task-content__answer-field form-control" placeholder="Input your answer here"></textarea>
           <button class="btn btn-primary" (click)="confirmTextTask()">
             Confirm
           </button>
