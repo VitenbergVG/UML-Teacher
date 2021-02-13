@@ -1,0 +1,5 @@
+$QUESTION$
+What is the Scrum?
+
+$CORRECT_ANSWER$
+Communism

@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'login', component: AuthorizationComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'study/course/:courseId/task/:taskId', component: StudyProcessComponent, canActivate: [AuthGuard] },
+  { path: 'study/course/:courseId/task/:taskNumber', component: StudyProcessComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'messanger', component: MessangerComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },

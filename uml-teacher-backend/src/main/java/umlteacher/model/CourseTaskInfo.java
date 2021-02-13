@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Path;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,10 +18,7 @@ public abstract class CourseTaskInfo {
 
     @Getter
     @Setter
-    private byte taskNumber;
-    @Getter
-    @Setter
     private TaskType type;
 
-    public abstract void fillTaskFromFileContent(List<String> contentLines);
+    public abstract void getTaskFromFile(Path path) throws IOException;
 }

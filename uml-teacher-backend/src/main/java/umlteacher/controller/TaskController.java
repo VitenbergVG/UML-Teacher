@@ -8,10 +8,15 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import umlteacher.model.CourseTaskInfo;
 import umlteacher.model.dao.Task;
+import umlteacher.model.dao.User;
+import umlteacher.service.dao.CourseService;
 import umlteacher.service.dao.TaskService;
+import umlteacher.service.dao.UserServiceImpl;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -20,6 +25,10 @@ import java.util.Objects;
 public class TaskController {
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private UserServiceImpl userService;
     @Autowired
     private ObjectMapper mapper;
 
@@ -47,7 +56,14 @@ public class TaskController {
     }
 
     @GetMapping("/course-tasks")
-    public List<CourseTaskInfo> getCourseTasks(@RequestParam("courseId") int courseId) {
+    public Map<Byte, CourseTaskInfo> getCourseTasks(@RequestParam("courseId") int courseId) {
         return taskService.getCourseTasks(courseId);
+    }
+
+    @GetMapping("/last")
+    public Byte getLastTaskNumber(@RequestParam("courseId") int courseId,
+                                  Principal principal) {
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        return courseService.getLastTaskNumber(courseId, user.getId());
     }
 }

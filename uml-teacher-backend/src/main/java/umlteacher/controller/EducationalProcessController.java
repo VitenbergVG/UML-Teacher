@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import umlteacher.exceptions.AuthorizationException;
 import umlteacher.model.dao.Answer;
 import umlteacher.model.dao.Course;
+import umlteacher.model.dao.Group;
 import umlteacher.model.dao.User;
-import umlteacher.service.dao.AnswerService;
-import umlteacher.service.dao.CourseService;
-import umlteacher.service.dao.LearningServiceImpl;
-import umlteacher.service.dao.UserServiceImpl;
+import umlteacher.service.dao.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -29,18 +27,20 @@ public class EducationalProcessController {
     private final AnswerService answerService;
     private final ObjectMapper mapper;
     private final CourseService courseService;
+    private final GroupService groupService;
 
     @Autowired
     public EducationalProcessController(LearningServiceImpl learningService,
-    									UserServiceImpl userService,
-    									AnswerService answerService,
-    									ObjectMapper mapper,
-    									CourseService courseService) {
+                                        UserServiceImpl userService,
+                                        AnswerService answerService,
+                                        ObjectMapper mapper,
+                                        CourseService courseService, GroupService groupService) {
         this.learningService = learningService;
         this.userService = userService;
         this.answerService = answerService;
         this.mapper = mapper;
         this.courseService = courseService;
+        this.groupService = groupService;
     }
 
     @GetMapping("/courses")
@@ -51,52 +51,64 @@ public class EducationalProcessController {
     @GetMapping("/courses/current")
     public Object getCurrentCoursesForUser(Principal principal)
             throws AuthorizationException {
-    	User user = (User) userService.loadUserByUsername(principal.getName());
-    	List<Course> courses = learningService.getCurrentCoursesForUser(user.getId());
-    	ArrayNode response = mapper.createArrayNode();
-    	for (Course c : courses) {
-    		ObjectNode course = mapper.valueToTree(c);
-    		course.set("complete", mapper.valueToTree(courseService.getPercent(c.getId(), user.getId())));
-    		response.add(course);
-    	}
-    	return response;
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        List<Course> courses = learningService.getCurrentCoursesForUser(user.getId());
+        ArrayNode response = mapper.createArrayNode();
+        for (Course c : courses) {
+            Double percent = courseService.getPercent(c.getId(), user.getId());
+            ObjectNode course = mapper.valueToTree(c);
+            if (!percent.equals(100.0)) {
+                course.set("complete", mapper.valueToTree(percent));
+                response.add(course);
+            }
+        }
+        return response;
     }
-    
+
     @GetMapping("/courses/completed")
     public Set<Course> getCompleted(Principal principal) {
-    	User user = (User) userService.loadUserByUsername(principal.getName());
-    	return courseService.getCompleted(user.getId());
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        return courseService.getCompleted(user.getId());
     }
-    
+
     @PostMapping("/answers/add")
-    public Answer addAnswer(@RequestParam int course_id,
-    						@RequestParam(required = false) Integer task_id,
-    						@RequestParam(required = false)	Byte task_number,
-    						@RequestBody String answer,
-    						Principal principal) {
-    	
-    	User user = (User) userService.loadUserByUsername(principal.getName());
-    	if (Objects.nonNull(task_id)) {
-    		return answerService.addAnswer(user.getId(), course_id, task_id, answer);    		
-    	}
-    	else if (Objects.nonNull(task_number)) {
-    		return answerService.addAnswer(user.getId(), course_id, task_number, answer);
-    	}
-    	else
-    		throw new RuntimeException("task_id or task_number required");
+    public Answer addAnswer(@RequestParam int courseId,
+                            @RequestParam(required = false) Integer taskId,
+                            @RequestParam(required = false) Byte taskNumber,
+                            @RequestParam(required = false) Boolean isCorrect,
+                            @RequestBody String answer,
+                            Principal principal) {
+
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        if (Objects.nonNull(taskId)) {
+            return answerService.addAnswer(user.getId(), courseId, taskId, answer, isCorrect);
+        } else if (Objects.nonNull(taskNumber)) {
+            return answerService.addAnswer(user.getId(), courseId, taskNumber, answer, isCorrect);
+        } else
+            throw new RuntimeException("taskId or taskNumber required");
     }
-    
+
     @GetMapping("/answers/get")
-    public Object get(@RequestParam int course_id, @RequestParam(required = false) Boolean unchecked, @RequestParam(required = false) Integer task_id) {
-    	if (Objects.isNull(task_id)) {
-    		return answerService.getByCourseId(course_id, unchecked);
-    	}
-    	return answerService.getByCourseIdAndTaskId(course_id, task_id);
+    public Object get(@RequestParam int courseId,
+                      @RequestParam(required = false) Boolean unchecked,
+                      @RequestParam(required = false) Byte taskNumber) {
+        if (Objects.isNull(taskNumber)) {
+            return answerService.getByCourseId(courseId, unchecked);
+        }
+        return answerService.getByCourseIdAndTaskNumber(courseId, taskNumber);
     }
-    
-    @PostMapping("answers/check")
-    public void check(@RequestParam int answer_id, @RequestBody boolean isCorrect, Principal principal) {
-    	User user = (User) userService.loadUserByUsername(principal.getName());
-    	answerService.check(answer_id, user.getId(), isCorrect);
+
+    @PostMapping("/answers/check")
+    public void check(@RequestParam int answerId, @RequestBody boolean isCorrect, Principal principal) {
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        answerService.check(answerId, user.getId(), isCorrect);
+    }
+
+    @GetMapping("/courses/join")
+    public void joinToCourse(@RequestParam("courseId") int courseId,
+                             Principal principal) {
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        Group group = groupService.findGroupByCourseId(courseId);
+        groupService.join(group.getId(), user.getId());
     }
 }

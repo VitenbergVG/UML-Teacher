@@ -24,7 +24,7 @@
           <div>
             <circle-progress [percent]="currentCourses[currentCourseIndex].complete">
             </circle-progress>
-            <button class="btn btn-primary course-card__button" (click)="null">
+            <button class="btn btn-primary course-card__button" (click)="continueCourse()">
               Continue
             </button>
           </div>
@@ -37,11 +37,12 @@
           <img *ngIf="currentCourseIndex === 0" src="assets\icons\arrow-left_disabled.svg">
         </a>
         <a class="course-card__external-button"
-          [style.cursor]="currentCourseIndex === currentCourses?.length - 1 ? 'unset' : 'pointer'" (click)="currentCourseIndex = (currentCourseIndex !== currentCourses?.length - 1) 
+          [style.cursor]="currentCourseIndex == currentCourses?.length - 1 ? 'unset' : 'pointer'" (click)="currentCourseIndex = (currentCourseIndex !== currentCourses?.length - 1) 
             ? currentCourseIndex + 1 
             : currentCourses?.length - 1">
           <img *ngIf="currentCourseIndex < currentCourses?.length - 1" src="assets\icons\arrow-right.svg">
-          <img *ngIf="currentCourseIndex === currentCourses?.length - 1" src="assets\icons\arrow-right_disabled.svg">
+          <img *ngIf="!currentCourses || currentCourseIndex === currentCourses?.length - 1 || currentCourses?.length === 0"
+            src="assets\icons\arrow-right_disabled.svg">
         </a>
       </div>
     </div>

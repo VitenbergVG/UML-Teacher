@@ -6,7 +6,6 @@ import umlteacher.exceptions.CourseNotFoundException;
 import umlteacher.exceptions.FileParsingException;
 import umlteacher.exceptions.TaskNotFoundException;
 import umlteacher.model.CourseTaskInfo;
-import umlteacher.model.TaskType;
 import umlteacher.model.dao.Course;
 import umlteacher.model.dao.CourseTask;
 import umlteacher.model.dao.Task;
@@ -15,13 +14,16 @@ import umlteacher.model.impl.MultipleTestCourseTask;
 import umlteacher.model.impl.TextCourseTask;
 import umlteacher.repo.dao.CourseRepository;
 import umlteacher.repo.dao.CourseTaskRepository;
+import umlteacher.repo.dao.StudentRepository;
 import umlteacher.repo.dao.TaskRepository;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
 
 @Service
 public class TaskService {
@@ -38,6 +40,8 @@ public class TaskService {
     private CourseRepository courseRepository;
     @Autowired
     private CourseTaskRepository courseTaskRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     public Task getById(int task_id) throws TaskNotFoundException {
         Task task = taskRepository.findById(task_id);
@@ -83,39 +87,37 @@ public class TaskService {
         return task;
     }
 
-    public List<CourseTaskInfo> getCourseTasks(int courseId) throws FileParsingException {
-        List<CourseTaskInfo> tasks = new ArrayList<>();
+    public Map<Byte, CourseTaskInfo> getCourseTasks(int courseId) throws FileParsingException {
+        Map<Byte, CourseTaskInfo> tasks = new TreeMap<>();
         Set<Task> tasksFromDb = getByCourseId(courseId);
         Set<CourseTask> courseTasks = courseTaskRepository.findByCourseId(courseId);
         tasksFromDb.forEach(task -> {
             CourseTask ct = courseTasks.stream()
-                    .filter(courseTask -> courseTask.getId() == task.getId())
+                    .filter(courseTask -> courseTask.getTask_id() == task.getId())
                     .findFirst().orElse(null);
             byte taskNumber = Objects.nonNull(ct) ? ct.getNumber() : 0;
             Path pathToFile = Paths.get(CONFIG_PATH, task.getPath() + TXT_EXTENSION);
+            CourseTaskInfo taskInfo = getCourseTaskInstanceByPath(task.getPath());
             try {
-                tasks.add(getCourseTaskInfo(pathToFile, taskNumber, task));
+                taskInfo.getTaskFromFile(pathToFile);
             } catch (IOException e) {
                 throw new FileParsingException("Can't parse file " + task.getPath());
             }
+            tasks.put(taskNumber, taskInfo);
         });
-        tasks.sort(Comparator.comparingInt(CourseTaskInfo::getTaskNumber));
         return tasks;
     }
 
-    private CourseTaskInfo getCourseTaskInfo(Path path, byte taskNumber, Task task) throws IOException {
-        CourseTaskInfo taskInfo = null;
-        if (task.getPath().contains(PATH_TO_TEST_TASKS)) {
-            taskInfo = new MultipleTestCourseTask(taskNumber, TaskType.TEST);
+    private CourseTaskInfo getCourseTaskInstanceByPath(String path) {
+        if (path.contains(PATH_TO_TEST_TASKS)) {
+            return new MultipleTestCourseTask();
         }
-        if (task.getPath().contains(PATH_TO_TEXT_TASKS)) {
-            taskInfo = new TextCourseTask(taskNumber, TaskType.TEXT);
+        if (path.contains(PATH_TO_TEXT_TASKS)) {
+            return new TextCourseTask();
         }
-        if (task.getPath().contains(PATH_TO_GRAPHIC_TASKS)) {
-            taskInfo = new GraphicCourseTask(taskNumber, TaskType.TEXT);
+        if (path.contains(PATH_TO_GRAPHIC_TASKS)) {
+            return new GraphicCourseTask();
         }
-        List<String> lines = Files.readAllLines(path);
-        Objects.requireNonNull(taskInfo).fillTaskFromFileContent(lines);
-        return taskInfo;
+        throw new IllegalArgumentException("Could not create task instance for path: ");
     }
 }

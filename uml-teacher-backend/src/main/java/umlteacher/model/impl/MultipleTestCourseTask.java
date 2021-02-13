@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import umlteacher.model.CourseTaskInfo;
 import umlteacher.model.TaskType;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,17 +19,18 @@ public class MultipleTestCourseTask extends CourseTaskInfo {
 
     List<TestCourseTask> testTasks;
 
-    public MultipleTestCourseTask(byte taskNumber, TaskType type) {
-        super(taskNumber, type);
+    public MultipleTestCourseTask() {
+        super(TaskType.TEST);
         testTasks = new ArrayList<>();
     }
 
     @Override
-    public void fillTaskFromFileContent(List<String> contentLines) {
+    public void getTaskFromFile(Path path) throws IOException {
+        List<String> lines = Files.readAllLines(path);
         TestCourseTask tmpTask = null;
-        for (int i = 0; i < contentLines.size(); i++) {
-            String line = contentLines.get(i);
-            String nextLine = (i + 1) < contentLines.size() ? contentLines.get(i + 1) : line;
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            String nextLine = (i + 1) < lines.size() ? lines.get(i + 1) : line;
             if (line.contains(QUESTION_ANCHOR)) {
                 tmpTask = new TestCourseTask();
                 tmpTask.setQuestion(nextLine);

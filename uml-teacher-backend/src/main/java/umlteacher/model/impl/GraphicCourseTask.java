@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import umlteacher.model.CourseTaskInfo;
 import umlteacher.model.TaskType;
 
-import java.util.List;
+import java.nio.file.Path;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -13,12 +13,12 @@ public class GraphicCourseTask extends CourseTaskInfo {
 
     private byte[] task;
 
-    public GraphicCourseTask(byte taskNumber, TaskType type) {
-        super(taskNumber, type);
+    public GraphicCourseTask() {
+        super(TaskType.GRAPHIC);
     }
 
     @Override
-    public void fillTaskFromFileContent(List<String> contentLines) {
+    public void getTaskFromFile(Path path) {
         // TODO implement this method
     }
 }

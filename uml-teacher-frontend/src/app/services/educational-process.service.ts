@@ -1,11 +1,15 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { CourseTaskInfoModel } from '../models/course-task-info.model';
 import { CourseModel } from '../models/course.model';
+import { TaskModel } from '../models/task.model';
 
 @Injectable()
 export class EducationalProcessService {
+
+  public tasksSubject = new BehaviorSubject<CourseTaskInfoModel[]>(undefined);
 
   constructor(private http: HttpClient) { }
 
@@ -36,5 +40,13 @@ export class EducationalProcessService {
         params: new HttpParams().set('courseId', courseId.toString()),
         headers: new HttpHeaders({ Authorization: localStorage.getItem('token') })
       });
+  }
+
+  joinToCourse(courseId: number): Observable<void> {
+    return this.http.get<void>(environment.baseUrl + '/education/courses/join',
+    {
+      params: new HttpParams().set('courseId', courseId.toString()),
+      headers: new HttpHeaders({ Authorization: localStorage.getItem('token') })
+    });
   }
 }
