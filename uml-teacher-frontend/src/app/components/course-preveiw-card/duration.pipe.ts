@@ -8,7 +8,7 @@ export class DurationPipe implements PipeTransform {
 
   transform(isoDuration: string): string {
     let duration = moment.duration(isoDuration);
-    return duration.hours() + 'h ' + duration.minutes() + 'min'; 
+    return duration.hours() + 'h ' + duration.minutes() + 'min';
   }
 
 }

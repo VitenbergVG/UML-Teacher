@@ -17,28 +17,43 @@
             <div class="course-card__image-container">
               <img src="assets\icons\graph_icon.svg">
             </div>
-            <div class="course-card__name text__major _small">
-              {{currentCourses[currentCourseIndex].name}}
+            <div>
+              <div class="course-card__name text__major _small">
+                {{currentCourses[currentCourseIndex].name}}
+              </div>
+              <div class="course-card__name text _small">by {{currentCourses[currentCourseIndex].teacher}}</div>
             </div>
           </div>
-          <button class="btn btn-primary course-card__button" (click)="null">
-            Continue
-          </button>
+          <div>
+            <circle-progress [percent]="currentCourses[currentCourseIndex].complete">
+            </circle-progress>
+            <button class="btn btn-primary course-card__button" (click)="continueCourse()">
+              Continue
+            </button>
+          </div>
         </ng-container>
       </div>
       <div class="course-card__external-button-container">
-        <a class="course-card__external-button" (click)="currentCourseIndex = currentCourseIndex - 1">
-          <img src="assets\icons\arrow-left.svg">
+        <a class="course-card__external-button" [style.cursor]="currentCourseIndex === 0 ? 'unset' : 'pointer'"
+          (click)="currentCourseIndex = currentCourseIndex !== 0 ? currentCourseIndex - 1 : 0">
+          <img *ngIf="currentCourseIndex > 0" src="assets\icons\arrow-left.svg">
+          <img *ngIf="currentCourseIndex === 0" src="assets\icons\arrow-left_disabled.svg">
         </a>
-        <a class="course-card__external-button" (click)="currentCourseIndex = currentCourseIndex + 1">
-          <img src="assets\icons\arrow-right.svg">
+        <a class="course-card__external-button"
+          [style.cursor]="currentCourseIndex == currentCourses?.length - 1 ? 'unset' : 'pointer'" (click)="currentCourseIndex = (currentCourseIndex !== currentCourses?.length - 1) 
+            ? currentCourseIndex + 1 
+            : currentCourses?.length - 1">
+          <img *ngIf="currentCourseIndex < currentCourses?.length - 1" src="assets\icons\arrow-right.svg">
+          <img
+            *ngIf="!currentCourses || currentCourseIndex === currentCourses?.length - 1 || currentCourses?.length === 0"
+            src="assets\icons\arrow-right_disabled.svg">
         </a>
       </div>
     </div>
 
     <ng-template #noCurrentCourses>
       <span class="course-card__no-courses">
-        You are not currently taking courses. 
+        You are not currently taking courses.
         Please select from the list below, a suitable course.
       </span>
     </ng-template>
@@ -75,7 +90,7 @@
     </div>
     <div class="d-flex flex-row">
       <div class="home-section __courses-quantity">
-        <span class="text__major _large mt-3 mr-3">5</span>
+        <span class="text__major _large mt-3 mr-3">{{completedCoursesQuantity || 0}}</span>
         <span>Courses completed</span>
       </div>
       <div class="home-section __courses-quantity">
@@ -89,9 +104,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #loading>
-  <div class="spinner-grow spinner-grow-sm" role="status"></div>
-  <div class="spinner-grow spinner-grow-sm" role="status"></div>
-  <div class="spinner-grow spinner-grow-sm" role="status"></div>
-</ng-template>

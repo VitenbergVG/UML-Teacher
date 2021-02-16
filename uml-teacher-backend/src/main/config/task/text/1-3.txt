@@ -1,0 +1,5 @@
+$QUESTION$
+Agile - это ...
+
+$CORRECT_ANSWER$
+Процессная методология

@@ -1,12 +1,11 @@
 package umlteacher.model.dao;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class Student {
     @JoinColumn(name = "edu_id", nullable = false)
     private Edu edu;
 
-    @Column(name = "user_contacts", length = 30, nullable = false)
+    @Column(name = "user_contacts", length = 30)
     private String userContacts;
 
     @ManyToMany(cascade = {CascadeType.ALL})

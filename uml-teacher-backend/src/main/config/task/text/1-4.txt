@@ -1,0 +1,5 @@
+$QUESTION$
+Framework - это ...
+
+$CORRECT_ANSWER$
+Профессиональный подход

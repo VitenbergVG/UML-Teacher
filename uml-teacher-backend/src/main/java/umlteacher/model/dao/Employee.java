@@ -1,13 +1,11 @@
 package umlteacher.model.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.sql.Date;
-
 import javax.persistence.*;
+import java.sql.Date;
 
 @Data
 @Entity
@@ -28,10 +26,10 @@ public class Employee {
     @Column(name = "employee_hiring_date", nullable = false)
     private Date hiringDate;
 
-    @Column(name = "employee_phone_number", length = 20, nullable = false)
+    @Column(name = "employee_phone_number", length = 20)
     private String phoneNumber;
 
-    @Column(name = "employee_email", length = 20, nullable = false)
+    @Column(name = "employee_email", length = 20)
     private String email;
     
 }

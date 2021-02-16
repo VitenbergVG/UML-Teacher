@@ -1,3 +1,183 @@
-<p>
-  messanger works!
-</p>
+<!-- <h3 class="text-center mt-4 text__major">Messaging</h3>
+<div class="messaging">
+  <div class="inbox_msg">
+    <div class="inbox_people">
+      <div class="headind_srch">
+        <div class="text _middle recent_heading">
+          Recent
+        </div>
+        <div class="srch_bar">
+          <div class="stylish-input-group">
+            <input type="text" class="search-bar" placeholder="Search">
+            <span class="input-group-addon">
+              <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="inbox_chat">
+        <ng-container *ngFor="let user of users">
+          active_chat if active
+          <div class="chat_list">
+            <div class="chat_people">
+              <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="chat_ib">
+                <h5>{{user.fullname}}<span class="chat_date">Dec 25</span></h5>
+                <p>Test, which is a new approach to have all solutions
+                  astrology under one roof.</p>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="mesgs">
+      <div class="msg_history">
+        <div class="incoming_msg">
+          <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+          </div>
+          <div class="received_msg">
+            <div class="received_withd_msg">
+              <p>Test which is a new approach to have all
+                solutions</p>
+              <span class="time_date"> 11:01 AM | June 9</span>
+            </div>
+          </div>
+        </div>
+        <div class="outgoing_msg">
+          <div class="sent_msg">
+            <p>Test which is a new approach to have all
+              solutions</p>
+            <span class="time_date"> 11:01 AM | June 9</span>
+          </div>
+        </div>
+        <div class="incoming_msg">
+          <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+          </div>
+          <div class="received_msg">
+            <div class="received_withd_msg">
+              <p>Test, which is a new approach to have</p>
+              <span class="time_date"> 11:01 AM | Yesterday</span>
+            </div>
+          </div>
+        </div>
+        <div class="outgoing_msg">
+          <div class="sent_msg">
+            <p>Apollo University, Delhi, India Test</p>
+            <span class="time_date"> 11:01 AM | Today</span>
+          </div>
+        </div>
+        <div class="incoming_msg">
+          <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+          </div>
+          <div class="received_msg">
+            <div class="received_withd_msg">
+              <p>We work directly with our designers and suppliers,
+                and sell direct to you, which means quality, exclusive
+                products, at a price anyone can afford.</p>
+              <span class="time_date"> 11:01 AM | Today</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="type_msg">
+        <div class="input_msg_write">
+          <input type="text" class="write_msg" placeholder="Type a message" />
+          <button class="msg_send_btn" type="button">
+            <img src="assets\icons\send-white-18dp.svg">
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div id="frame">
+  <div id="sidepanel">
+    <div id="profile">
+      <div class="wrap">
+        <img id="profile-img" src="https://ptetutorials.com/images/user-profile.png" class="online" alt="" />
+        <!-- TODO {{currentUser.name}} -->
+        <p>BOBAH</p>
+        <div id="status-options">
+          <ul>
+            <li id="status-online" class="active">
+              <span class="status-circle"></span>
+              <p>Online</p>
+            </li>
+            <li id="status-away">
+              <span class="status-circle"></span>
+              <p>Away</p>
+            </li>
+            <li id="status-busy">
+              <span class="status-circle"></span>
+              <p>Busy</p>
+            </li>
+            <li id="status-offline">
+              <span class="status-circle"></span>
+              <p>Offline</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="search">
+      <div id="contacts">
+        <ul>
+          <li *ngFor="let contact of contacts" (click)="chatService.activeContactSubject.next(contact)" [ngClass]="activeContact && contact.userId === activeContact.userId
+            ? ' contact active' : 'contact'">
+            <div class="wrap">
+              <span class="contact-status online"></span>
+              <img [id]="contact.userId" src="https://ptetutorials.com/images/user-profile.png" alt="" />
+              <div class="meta">
+                <p class="name">{{contact.fullname}}</p>
+                <p *ngIf="contact.newMessages !== undefined &&
+                contact.newMessages > 0" class="preview">
+                  {{contact.newMessages}} new messages
+                </p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div id="bottom-bar">
+        <button id="addcontact">
+          <i class="fa fa-user fa-fw" aria-hidden="true"></i>{{" "}}
+          <span>Profile</span>
+        </button>
+        <button id="settings">
+          <i class="fa fa-cog fa-fw" aria-hidden="true"></i>{{" "}}
+          <span>Settings</span>
+        </button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="contact-profile">
+        <img src="https://ptetutorials.com/images/user-profile.png" alt="" />
+        <p>{{activeContact && activeContact.fullname}}</p>
+      </div>
+      <!-- ScrollToBottom -->
+      <div className="messages">
+        <ul>
+          <li *ngFor="let msg of messages" [ngClass]="msg.senderId===authService.currentUserId ? 'sent' : 'replies'">
+            <img *ngIf="msg.senderId !== authService.currentUserId"
+              src="https://ptetutorials.com/images/user-profile.png" alt="" />
+            <p>{{msg.content}}</p>
+          </li>
+        </ul>
+      </div>
+      <div class="message-input">
+        <div class="wrap">
+          <input name="user_input" size="large" placeholder="Write your message..." [value]="'text'" (onChange)="null" />
+
+          <!-- <Button icon="<i class="fa fa-paper-plane" aria-hidden="true"></i>}
+            onClick={() => {
+            sendMessage(text);
+            setText("");
+            }}
+            /> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

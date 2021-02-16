@@ -12,10 +12,11 @@ import { UmlTeacherComponentsModule } from './components/uml-teacher-components.
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ChartsModule } from 'ng2-charts';
 import { DurationPipe } from './components/course-preveiw-card/duration.pipe';
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavbarComponent
+    AppComponent, NavbarComponent, NotificationComponent
   ],
   imports: [
     CommonModule, BrowserModule, RouterModule, FormsModule, HttpClientModule, AppRoutingModule, UmlTeacherComponentsModule,

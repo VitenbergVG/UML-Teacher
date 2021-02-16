@@ -1,16 +1,8 @@
 package umlteacher.controller;
 
-import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import umlteacher.exceptions.BadFiledValueException;
 import umlteacher.exceptions.EduNotFoundException;
 import umlteacher.exceptions.GroupNotFoundException;
@@ -20,6 +12,8 @@ import umlteacher.model.dao.Student;
 import umlteacher.service.dao.EmployeeService;
 import umlteacher.service.dao.StudentService;
 import umlteacher.service.dao.UserServiceImpl;
+
+import java.util.Objects;
 
 @RestController
 @CrossOrigin
@@ -31,38 +25,45 @@ public class AdminController {
     private EmployeeService employeeService;
     @Autowired
     private UserServiceImpl userServiceImpl;
-    
+
     @GetMapping("/user/get")
-    public Object get(@RequestParam(required = false) Long user_id) throws UserNotFoundException {
-    	if (Objects.isNull(user_id))
-    		return userServiceImpl.getAllUsers();
-    	else
-    		return userServiceImpl.findUserById(user_id);
+    public Object get(@RequestParam(required = false) Long userId) throws UserNotFoundException {
+        if (Objects.isNull(userId))
+            return userServiceImpl.getAllUsers();
+        else
+            return userServiceImpl.findUserById(userId);
     }
     
     @PostMapping("/add-student")
     public Student saveStudent(@RequestBody Student student) throws UserNotFoundException, EduNotFoundException, GroupNotFoundException, BadFiledValueException {
     	return studentService.save(student);
     }
-    
+
     @GetMapping("/delete-student")
-    public void deleteStudent(@RequestParam int student_id) {
-    	studentService.delete(student_id);
+    public void deleteStudent(@RequestParam int studentId) {
+        studentService.delete(studentId);
     }
     
     @PostMapping("/add-employee")
     public Employee saveEmployee(@RequestBody Employee employee) throws UserNotFoundException, BadFiledValueException {
     	return employeeService.save(employee);
     }
-    
+
     @GetMapping("/delete-employee")
-    public void deleteEmployee(@RequestParam int employee_id) {
-    	employeeService.delete(employee_id);
-    }
-    
-    @GetMapping("/delete")
-    public boolean deleteUser(@RequestParam Long user_id) {
-    	return userServiceImpl.deleteUser(user_id);
+    public void deleteEmployee(@RequestParam int employeeId) {
+        employeeService.delete(employeeId);
     }
 
+    @GetMapping("/delete")
+    public boolean deleteUser(@RequestParam Long userId) {
+        return userServiceImpl.deleteUser(userId);
+    }
+
+    @GetMapping("/change-role")
+    public ResponseEntity changeRoleForUser(@RequestParam("userId") Long userId,
+                                            @RequestParam("newRoleName") String newRoleName)
+            throws UserNotFoundException {
+        userServiceImpl.changeRoleForUser(userId, newRoleName);
+        return ResponseEntity.ok(200);
+    }
 }

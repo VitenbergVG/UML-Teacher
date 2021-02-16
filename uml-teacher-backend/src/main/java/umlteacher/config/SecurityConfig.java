@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import umlteacher.service.dao.UserServiceImpl;
 
 @Configuration
@@ -35,10 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/uml/**").permitAll()
-                .antMatchers("/education/**").permitAll()
                 .antMatchers("/authorization/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/**").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers("/**").hasAnyAuthority("ADMIN", "USER", "STUDENT", "EMPLOYEE")
                 .anyRequest().permitAll()
                 .and().httpBasic();
     }

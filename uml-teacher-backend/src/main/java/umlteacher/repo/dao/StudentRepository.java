@@ -1,11 +1,10 @@
 package umlteacher.repo.dao;
 
-import java.util.Set;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import umlteacher.model.dao.Student;
+
+import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 	

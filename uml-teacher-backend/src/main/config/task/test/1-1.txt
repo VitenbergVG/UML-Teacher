@@ -1,0 +1,17 @@
+$QUESTION$
+1sgsdfgnfdsjkgdsfklgkdsfjgnsdfjkgnsdkfgnkdsfgnkjsngkjsdfgkjnsdfjkgnskfjgn?
+
+$ANSWERS$
+ccc,345435,dfgdfg,ttt,lllppp
+
+$CORRECT_ANSWER$
+lllppp
+
+$QUESTION$
+2sgsdfgnfdsjkgdsfklgkdsfjgnsdfjkgnsdkfgnkdsfgnkjsngkjsdfgkjnsdfjkgnskfjgn?
+
+$ANSWERS$
+a,b345435,dfgfdg3,dfgdfg
+
+$CORRECT_ANSWER$
+dfgfdg3
