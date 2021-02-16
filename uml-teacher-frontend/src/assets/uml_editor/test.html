@@ -32,7 +32,7 @@
     <script type="text/javascript">
         var key = ""
         var editorUi
-        
+
         const queryString = window.location.search
         const urlParams = new URLSearchParams(queryString)
         if (urlParams.has("key")) {
@@ -43,7 +43,7 @@
         var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
             mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
 
-        mxUtils.getAll([bundle, STYLE_PATH + '/default.xml', ], function (xhr) {
+        mxUtils.getAll([bundle, STYLE_PATH + '/default.xml',], function (xhr) {
             mxResources.parse(xhr[0].getText());
 
             var themes = new Object();
@@ -52,14 +52,14 @@
             editorUi = new EditorUi(new Editor(urlParams.has('view'), themes));
 
             editorUi.editor.filename = key
-            
+
         })
 
 
         var xhr = new XMLHttpRequest()
         xhr.open('GET', "http://localhost:8080/uml/" + key)
         xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:admin"))
-        xhr.onload = function() {
+        xhr.onload = function () {
             const xml = xhr.response
             if (xml) {
                 var xmlElem = mxUtils.parseXml(atob(decodeURIComponent(xml))).documentElement;
@@ -69,13 +69,17 @@
         xhr.send()
 
 
-        function saveUml(file) {
+        function saveUml() {
             xhr = new XMLHttpRequest()
             xhr.open('POST', "http://localhost:8080/uml/" + key)
             xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:admin"))
-            xhr.send(file)
+            xhr.send(btoa(mxUtils.getXml(editorUi.editor.getGraphXml())))
         }
-        
+
     </script>
+    <button class="btn-confirm" onclick="saveUml()">
+        Confirm
+    </button>
 </body>
+
 </html>

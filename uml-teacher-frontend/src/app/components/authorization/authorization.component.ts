@@ -18,30 +18,34 @@ export class AuthorizationComponent implements OnInit {
   constructor(private authService: AuthorizationService,
     private router: Router) { }
 
-    ngOnInit() {
-      this.authService.getSignUpModeSubject()
-        .subscribe(isSignUpMode => {
-          this.isSignUpMode = isSignUpMode;
-        });
-      this.isAuthorizationErrorOccured = false;
-      localStorage.setItem('token', '');
-    }
+  ngOnInit() {
+    this.authService.currentUser = undefined;
+    this.authService.getSignUpModeSubject()
+      .subscribe(isSignUpMode => {
+        this.isSignUpMode = isSignUpMode;
+      });
+    this.isAuthorizationErrorOccured = false;
+    localStorage.setItem('token', '');
+  }
 
   login() {
-    this.authService.login(this.credentials).subscribe(userId => {
+    this.authService.login(this.credentials).subscribe(user => {
       this.isAuthorizationErrorOccured = false;
-      this.authService.currentUserId = userId;
-      this.authService.checkUserHasAdminRole();
-      this.router.navigate(['/home']);
+      this.authService.currentUser = user;
+
+      if (user.role === 'EMPLOYEE') {
+        this.router.navigate(['/home-employee']);
+      } else {
+        this.router.navigate(['/home']);
+      }
     }, error => this.isAuthorizationErrorOccured = true);
   }
 
   signUp() {
     this.authService.signUp(this.credentials, this.userFullname)
-      .subscribe(userId => {
+      .subscribe(user => {
         this.isAuthorizationErrorOccured = false;
-        this.authService.currentUserId = userId;
-        this.authService.checkUserHasAdminRole();
+        this.authService.currentUser = user;
         this.router.navigate(['/home']);
       }, error => this.isAuthorizationErrorOccured = true);
   }

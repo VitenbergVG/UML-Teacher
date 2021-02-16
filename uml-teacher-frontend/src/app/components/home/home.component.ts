@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    this.educationalProcessService.tasksSubject.next(undefined);
     this.educationalProcessService.getAllCourses()
       .subscribe(courses => this.courses = courses);
     this.educationalProcessService.getCurrentCourses()
