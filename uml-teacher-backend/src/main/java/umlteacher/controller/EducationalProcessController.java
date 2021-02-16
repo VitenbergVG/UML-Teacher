@@ -25,6 +25,8 @@ public class EducationalProcessController {
     private final LearningServiceImpl learningService;
     private final UserServiceImpl userService;
     private final AnswerService answerService;
+    private final TaskService taskService;
+    private final StudentService studentService;
     private final ObjectMapper mapper;
     private final CourseService courseService;
     private final GroupService groupService;
@@ -33,19 +35,28 @@ public class EducationalProcessController {
     public EducationalProcessController(LearningServiceImpl learningService,
                                         UserServiceImpl userService,
                                         AnswerService answerService,
-                                        ObjectMapper mapper,
+                                        TaskService taskService, StudentService studentService, ObjectMapper mapper,
                                         CourseService courseService, GroupService groupService) {
         this.learningService = learningService;
         this.userService = userService;
         this.answerService = answerService;
+        this.taskService = taskService;
+        this.studentService = studentService;
         this.mapper = mapper;
         this.courseService = courseService;
         this.groupService = groupService;
     }
 
     @GetMapping("/courses")
-    public List<Course> getAllCourses() {
-        return learningService.getAllCourses();
+    public Object getAllCourses() {
+        List<Course> courses = learningService.getAllCourses();
+        ArrayNode response = mapper.createArrayNode();
+        for (Course c : courses) {
+            ObjectNode course = mapper.valueToTree(c);
+            course.set("teacher", mapper.valueToTree(groupService.findTeacherNameByCourseId(c.getId())));
+            response.add(course);
+        }
+        return response;
     }
 
     @GetMapping("/courses/current")
@@ -59,6 +70,7 @@ public class EducationalProcessController {
             ObjectNode course = mapper.valueToTree(c);
             if (!percent.equals(100.0)) {
                 course.set("complete", mapper.valueToTree(percent));
+                course.set("teacher", mapper.valueToTree(groupService.findTeacherNameByCourseId(c.getId())));
                 response.add(course);
             }
         }
@@ -91,11 +103,21 @@ public class EducationalProcessController {
     @GetMapping("/answers/get")
     public Object get(@RequestParam int courseId,
                       @RequestParam(required = false) Boolean unchecked,
-                      @RequestParam(required = false) Byte taskNumber) {
+                      @RequestParam(required = false) Byte taskNumber,
+                      @RequestParam(required = false) Long studentUserId) {
         if (Objects.isNull(taskNumber)) {
-            return answerService.getByCourseId(courseId, unchecked);
+            ArrayNode response = mapper.createArrayNode();
+            for (Answer a : answerService.getByCourseId(courseId, unchecked)) {
+                ObjectNode answer = mapper.valueToTree(a);
+                answer.set("courseTask",
+                        mapper.valueToTree(taskService.getQuestionForTaskNumberByTaskId(a.getCourse_id(), a.getTask_id())));
+                answer.set("student", mapper.valueToTree(studentService.getStudentNameByUserId(a.getStudent_id())));
+                answer.set("course", mapper.valueToTree(courseService.findCourseById(a.getCourse_id())));
+                response.add(answer);
+            }
+            return response;
         }
-        return answerService.getByCourseIdAndTaskNumber(courseId, taskNumber);
+        return answerService.getByCourseIdAndTaskNumberAndStudentId(courseId, studentUserId, taskNumber);
     }
 
     @PostMapping("/answers/check")

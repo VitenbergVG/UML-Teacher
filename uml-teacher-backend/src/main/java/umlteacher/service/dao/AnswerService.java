@@ -59,10 +59,11 @@ public class AnswerService {
         if (Objects.isNull(student))
             throw new StudentNotFoundException("You are not a student");
 
-        Answer a = answerRepository.getByCourseIdAndTaskNumber(course_id, task_number);
+        Answer a = answerRepository.getByCourseIdAndTaskNumberAndStudentId(course_id, student.getId(), task_number);
         Task task = taskRepository.findByCourseIdAndTaskNumber(course_id, task_number);
         if (Objects.isNull(task)) {
-            throw new TaskNotFoundException("Task not found by course_id " + course_id + " and task_number " + task_number);
+            throw new TaskNotFoundException("Task not found by course_id "
+                    + course_id + " and task_number " + task_number);
         }
         if (Objects.isNull(a)) {
             a = new Answer();
@@ -79,9 +80,9 @@ public class AnswerService {
         return answerRepository.save(a);
     }
 
-    public Set<Answer> getByCourseId(int course_id, Boolean uncheked) {
-        if (Objects.nonNull(uncheked))
-            if (uncheked)
+    public Set<Answer> getByCourseId(int course_id, Boolean unchecked) {
+        if (Objects.nonNull(unchecked))
+            if (unchecked)
                 return answerRepository.getByCourseIdAndUnchecked(course_id);
             else
                 return answerRepository.getByCourseIdAndChecked(course_id);
@@ -89,8 +90,11 @@ public class AnswerService {
             return answerRepository.getByCourseId(course_id);
     }
 
-    public Answer getByCourseIdAndTaskNumber(int course_id, byte taskNumber) {
-        Answer answer = answerRepository.getByCourseIdAndTaskNumber(course_id, taskNumber);
+    public Answer getByCourseIdAndTaskNumberAndStudentId(int course_id, long studentUserId, byte taskNumber) {
+        Student student = studentRepository.findByUserId(studentUserId);
+        if (Objects.isNull(student))
+            throw new StudentNotFoundException("You are not a student");
+        Answer answer = answerRepository.getByCourseIdAndTaskNumberAndStudentId(course_id, student.getId(), taskNumber);
         if (Objects.isNull(answer))
             throw new AnswerNotFoundException("Answer not found by course_id "
                     + course_id + " and taskNumber " + taskNumber);

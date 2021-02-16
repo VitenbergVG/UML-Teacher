@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthorizationComponent } from './components/authorization/authorization.component';
+import { CheckAnswerProcessComponent } from './components/check-answer-process/check-answer-process.component';
+import { HomeEmployeeComponent } from './components/home-employee/home-employee.component';
 import { HomeComponent } from './components/home/home.component';
 import { MessangerComponent } from './components/messanger/messanger.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -16,6 +18,8 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'messanger', component: MessangerComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+  { path: 'home-employee', component: HomeEmployeeComponent, canActivate: [AuthGuard] },
+  { path: 'check/answer/:answerId', component: CheckAnswerProcessComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login' },
 
   //FOR TESTING PURPOSE

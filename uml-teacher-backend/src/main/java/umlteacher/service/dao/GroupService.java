@@ -40,15 +40,19 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
+    public String findTeacherNameByCourseId(int courseId) {
+        return groupRepository.findTeacherNameByCourseId(courseId);
+    }
+
     public Group save(Group group) throws EmployeeNotFoundException, CourseNotFoundException, BadFiledValueException {
         Group g = groupRepository.findById(group.getId());
         if (Objects.isNull(g)) {
             g = new Group();
         }
-		group.setStudents(g.getStudents());
-		return groupRepository.save(group);
-	}
-	
+        group.setStudents(g.getStudents());
+        return groupRepository.save(group);
+    }
+
 	public void addStudents(int group_id, int[] student_ids) throws GroupNotFoundException, StudentNotFoundException {
 		Group group = findGroupById(group_id);
 		Set<Student> new_students = studentRepository.findByIds(student_ids);
@@ -57,16 +61,17 @@ public class GroupService {
 		group.setStudents(students);
 		groupRepository.save(group);
 	}
-	
-	public void removeStudents(int group_id, int[] student_ids) throws GroupNotFoundException {
+
+
+    public void removeStudents(int group_id, int[] student_ids) throws GroupNotFoundException {
 		Group group = findGroupById(group_id);
 		Set<Student> tmp = group.getStudents();
 		tmp.removeIf(student -> Arrays.stream(student_ids).anyMatch(i -> i == student.getId()));
 		group.setStudents(tmp);
 		groupRepository.save(group);
 	}
-	
-	public void join(int group_id, long user_id) {
+
+    public void join(int group_id, long user_id) {
 		Group group = findGroupById(group_id);
 		Student student = studentRepository.findByUserId(user_id);
 		if (Objects.isNull(student))
@@ -74,8 +79,8 @@ public class GroupService {
 		student.getGroups().add(group);
 		studentRepository.save(student);
 	}
-	
-	public void delete(int group_id) throws GroupNotFoundException {
+
+    public void delete(int group_id) throws GroupNotFoundException {
 		Group group = groupRepository.findById(group_id);
 		if (Objects.isNull(group)) {
 			throw new GroupNotFoundException(group_id);

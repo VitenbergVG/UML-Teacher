@@ -1,37 +1,33 @@
 package umlteacher.service.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import umlteacher.exceptions.BadFiledValueException;
-import umlteacher.exceptions.EduNotFoundException;
-import umlteacher.exceptions.GroupNotFoundException;
-import umlteacher.exceptions.StudentNotFoundException;
-import umlteacher.exceptions.UserNotFoundException;
+import umlteacher.exceptions.*;
 import umlteacher.model.dao.Employee;
 import umlteacher.model.dao.Student;
+import umlteacher.model.dao.User;
 import umlteacher.repo.dao.EmployeeRepository;
 import umlteacher.repo.dao.GroupRepository;
 import umlteacher.repo.dao.StudentRepository;
+import umlteacher.repo.dao.UserRepository;
+
+import java.util.*;
 
 @Service
 public class StudentService {
 	@Autowired
 	private StudentRepository studentRepository;
 	@Autowired
+	private UserRepository userRepository;
+	@Autowired
 	private GroupRepository groupRepository;
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	
+
 	public List<Student> findAll() {
 		return studentRepository.findAll();
 	}
-	
+
 	public Student findById(int student_id) throws StudentNotFoundException {
 		Student student = studentRepository.findById(student_id);
 		if (Objects.isNull(student)) {
@@ -39,7 +35,12 @@ public class StudentService {
 		}
 		return student;
 	}
-	
+
+	public Map<Long, String> getStudentNameByUserId(int student_id) {
+		User user = userRepository.getUserByStudentId(student_id);
+		return Collections.singletonMap(user.getId(), user.getFullname());
+	}
+
 	public Set<Student> findByIds(int[] student_ids) throws StudentNotFoundException {
 		Set<Student> result = studentRepository.findByIds(student_ids);
 		List<Student> tmp = new ArrayList<Student>(result);

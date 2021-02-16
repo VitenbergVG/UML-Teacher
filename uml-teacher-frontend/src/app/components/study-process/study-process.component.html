@@ -60,7 +60,12 @@
           </form>
         </ng-container>
       </div>
-      <div *ngSwitchCase="'GRAPHIC'"></div>
+      <div *ngSwitchCase="'GRAPHIC'">
+        <div class="task-content__name text _large _bold">Task {{currentTaskNumber}}: Make a diagram</div>
+        <div class="task-content__question text _large _bold">{{tasks[currentTaskNumber].question}}</div>
+        <uml-editor [courseId]="course.id" [taskNumber]="currentTaskNumber" [studentUserId]="authService.currentUser.userId">
+        </uml-editor>
+      </div>
     </div>
   </ng-container>
 </div>

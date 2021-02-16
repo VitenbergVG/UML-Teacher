@@ -9,6 +9,7 @@ export class CourseModel {
   rating: number;
   timeToComplete: string;
   complete?: number;
+  teacher?: string;
   task: TaskModel[];
   educationMaterials: EducationMaterialModel[];
 }

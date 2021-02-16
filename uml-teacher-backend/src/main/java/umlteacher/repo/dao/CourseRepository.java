@@ -4,11 +4,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import umlteacher.model.dao.Course;
 
+import java.util.List;
 import java.util.Set;
 
 public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     Course findById(int id);
+
+    @Query(value = "select course.* from groups \n" +
+            "join course on groups.current_course_id = course.course_id\n" +
+            "where first_teacher_id = ?1 or second_teacher_id = ?1", nativeQuery = true)
+    List<Course> findByEmployeeId(int employeeId);
 
     @Query(value = "select cast(count(a.task_id) as real) / count(ct.task_id) * 100 "
             + "from course_task ct "

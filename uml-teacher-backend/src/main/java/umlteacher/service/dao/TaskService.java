@@ -20,10 +20,7 @@ import umlteacher.repo.dao.TaskRepository;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 @Service
 public class TaskService {
@@ -87,6 +84,23 @@ public class TaskService {
         return task;
     }
 
+    public Map<Byte, String> getQuestionForTaskNumberByTaskId(int courseId, int taskId) {
+        Task task = getById(taskId);
+        Set<CourseTask> courseTasks = courseTaskRepository.findByCourseId(courseId);
+        CourseTask ct = courseTasks.stream()
+                .filter(courseTask -> courseTask.getTask_id() == taskId)
+                .findFirst().orElse(null);
+        byte taskNumber = Objects.nonNull(ct) ? ct.getNumber() : 0;
+        Path pathToFile = Paths.get(CONFIG_PATH, task.getPath() + TXT_EXTENSION);
+        CourseTaskInfo taskInfo = getCourseTaskInstanceByPath(task.getPath(), task.getId());
+        try {
+            taskInfo.getTaskFromFile(pathToFile);
+        } catch (IOException e) {
+            throw new FileParsingException("Can't parse file " + task.getPath());
+        }
+        return Collections.singletonMap(taskNumber, ((GraphicCourseTask) taskInfo).getQuestion());
+    }
+
     public Map<Byte, CourseTaskInfo> getCourseTasks(int courseId) throws FileParsingException {
         Map<Byte, CourseTaskInfo> tasks = new TreeMap<>();
         Set<Task> tasksFromDb = getByCourseId(courseId);
@@ -97,7 +111,7 @@ public class TaskService {
                     .findFirst().orElse(null);
             byte taskNumber = Objects.nonNull(ct) ? ct.getNumber() : 0;
             Path pathToFile = Paths.get(CONFIG_PATH, task.getPath() + TXT_EXTENSION);
-            CourseTaskInfo taskInfo = getCourseTaskInstanceByPath(task.getPath());
+            CourseTaskInfo taskInfo = getCourseTaskInstanceByPath(task.getPath(), task.getId());
             try {
                 taskInfo.getTaskFromFile(pathToFile);
             } catch (IOException e) {
@@ -108,16 +122,16 @@ public class TaskService {
         return tasks;
     }
 
-    private CourseTaskInfo getCourseTaskInstanceByPath(String path) {
+    private CourseTaskInfo getCourseTaskInstanceByPath(String path, int taskId) {
         if (path.contains(PATH_TO_TEST_TASKS)) {
-            return new MultipleTestCourseTask();
+            return new MultipleTestCourseTask(taskId);
         }
         if (path.contains(PATH_TO_TEXT_TASKS)) {
-            return new TextCourseTask();
+            return new TextCourseTask(taskId);
         }
         if (path.contains(PATH_TO_GRAPHIC_TASKS)) {
-            return new GraphicCourseTask();
+            return new GraphicCourseTask(taskId);
         }
-        throw new IllegalArgumentException("Could not create task instance for path: ");
+        throw new IllegalArgumentException("Could not create task instance for path: " + path);
     }
 }

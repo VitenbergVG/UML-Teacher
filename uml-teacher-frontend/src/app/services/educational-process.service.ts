@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CourseTaskInfoModel } from '../models/course-task-info.model';
 import { CourseModel } from '../models/course.model';
-import { TaskModel } from '../models/task.model';
 
 @Injectable()
 export class EducationalProcessService {
@@ -34,19 +33,25 @@ export class EducationalProcessService {
       });
   }
 
-  getCourseById(courseId: number): Observable<CourseModel> {
-    return this.http.get<CourseModel>(environment.baseUrl + '/course/get',
+  getCourseById(byTeacher: boolean, courseId?: number): Observable<any> {
+    let params = courseId !== undefined
+      ? new HttpParams()
+        .set('byTeacher', String(byTeacher))
+        .set('courseId', courseId.toString())
+      : new HttpParams()
+        .set('byTeacher', String(byTeacher));
+    return this.http.get<any>(environment.baseUrl + '/course/get',
       {
-        params: new HttpParams().set('courseId', courseId.toString()),
+        params: params,
         headers: new HttpHeaders({ Authorization: localStorage.getItem('token') })
       });
   }
 
   joinToCourse(courseId: number): Observable<void> {
     return this.http.get<void>(environment.baseUrl + '/education/courses/join',
-    {
-      params: new HttpParams().set('courseId', courseId.toString()),
-      headers: new HttpHeaders({ Authorization: localStorage.getItem('token') })
-    });
+      {
+        params: new HttpParams().set('courseId', courseId.toString()),
+        headers: new HttpHeaders({ Authorization: localStorage.getItem('token') })
+      });
   }
 }

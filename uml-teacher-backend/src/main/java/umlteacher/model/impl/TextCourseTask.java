@@ -17,8 +17,8 @@ public class TextCourseTask extends CourseTaskInfo {
     private String question;
     private String answer;
 
-    public TextCourseTask() {
-        super(TaskType.TEXT);
+    public TextCourseTask(int taskId) {
+        super(TaskType.TEXT, taskId);
     }
 
     @Override

@@ -17,8 +17,11 @@
             <div class="course-card__image-container">
               <img src="assets\icons\graph_icon.svg">
             </div>
-            <div class="course-card__name text__major _small">
-              {{currentCourses[currentCourseIndex].name}}
+            <div>
+              <div class="course-card__name text__major _small">
+                {{currentCourses[currentCourseIndex].name}}
+              </div>
+              <div class="course-card__name text _small">by {{currentCourses[currentCourseIndex].teacher}}</div>
             </div>
           </div>
           <div>
@@ -41,7 +44,8 @@
             ? currentCourseIndex + 1 
             : currentCourses?.length - 1">
           <img *ngIf="currentCourseIndex < currentCourses?.length - 1" src="assets\icons\arrow-right.svg">
-          <img *ngIf="!currentCourses || currentCourseIndex === currentCourses?.length - 1 || currentCourses?.length === 0"
+          <img
+            *ngIf="!currentCourses || currentCourseIndex === currentCourses?.length - 1 || currentCourses?.length === 0"
             src="assets\icons\arrow-right_disabled.svg">
         </a>
       </div>

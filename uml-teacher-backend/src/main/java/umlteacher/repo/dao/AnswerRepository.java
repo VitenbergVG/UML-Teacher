@@ -27,6 +27,6 @@ public interface AnswerRepository extends JpaRepository<Answer, Integer> {
 
     @Query(value = "SELECT * FROM answer a join course_task ct" +
             " ON a.course_id = ct.course_id and a.task_id = ct.task_id" +
-            " WHERE a.course_id = ?1 and task_number = ?2", nativeQuery = true)
-    Answer getByCourseIdAndTaskNumber(int task_id, byte task_number);
+            " WHERE a.course_id = ?1 and a.student_id = ?2 and task_number = ?3", nativeQuery = true)
+    Answer getByCourseIdAndTaskNumberAndStudentId(int task_id, int student_id, byte task_number);
 }

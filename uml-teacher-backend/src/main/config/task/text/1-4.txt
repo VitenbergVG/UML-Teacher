@@ -1,5 +1,5 @@
 $QUESTION$
-What is the Scrum?
+Framework - это ...
 
 $CORRECT_ANSWER$
-Communism
+Профессиональный подход

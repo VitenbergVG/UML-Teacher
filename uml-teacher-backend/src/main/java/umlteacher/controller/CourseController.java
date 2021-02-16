@@ -17,33 +17,37 @@ import java.util.Objects;
 @CrossOrigin
 @RequestMapping("/course")
 public class CourseController {
-	@Autowired
-	private CourseService courseService;
-	@Autowired
-	private UserServiceImpl userService;
-	@Autowired
-	private ObjectMapper mapper;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private UserServiceImpl userService;
+    @Autowired
+    private ObjectMapper mapper;
 
-	@GetMapping("/get")
-	public Object getCourseById(Principal principal,
-								@RequestParam(required = false) Integer courseId) throws CourseNotFoundException {
-		if (Objects.isNull(courseId))
-			return courseService.findAll();
-		Course course = courseService.findCourseById(courseId);
-		ObjectNode courseNode = mapper.valueToTree(course);
-		User user = (User) userService.loadUserByUsername(principal.getName());
-		courseNode.set("complete", mapper.valueToTree(courseService.getPercent(courseId, user.getId())));
-		return courseNode;
-	}
+    @GetMapping("/get")
+    public Object getCourseById(Principal principal,
+                                @RequestParam(required = false) Integer courseId,
+                                @RequestParam boolean byTeacher) throws CourseNotFoundException {
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        if (byTeacher) {
+            return courseService.findByEmployeeUserId(user.getId());
+        }
+        if (Objects.isNull(courseId))
+            return courseService.findAll();
+        Course course = courseService.findCourseById(courseId);
+        ObjectNode courseNode = mapper.valueToTree(course);
+        courseNode.set("complete", mapper.valueToTree(courseService.getPercent(courseId, user.getId())));
+        return courseNode;
+    }
 
-	@PostMapping("/save")
-	public Course save(@RequestBody Course course) {
-		return courseService.save(course);
-	}
+    @PostMapping("/save")
+    public Course save(@RequestBody Course course) {
+        return courseService.save(course);
+    }
 
-	@GetMapping("/delete")
-	public void delete(@RequestParam int courseId) {
-		courseService.delete(courseId);
-	}
+    @GetMapping("/delete")
+    public void delete(@RequestParam int courseId) {
+        courseService.delete(courseId);
+    }
 
 }

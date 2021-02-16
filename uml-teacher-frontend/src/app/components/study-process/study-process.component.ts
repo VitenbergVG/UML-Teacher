@@ -5,6 +5,7 @@ import { CourseTaskInfoModel } from 'src/app/models/course-task-info.model';
 import { CourseModel } from 'src/app/models/course.model';
 import { NotificationType } from 'src/app/models/notification-type.enum';
 import { TaskType } from 'src/app/models/task-type.enum';
+import { AuthorizationService } from 'src/app/services/authorization.service';
 import { EducationalProcessService } from 'src/app/services/educational-process.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TaskManagementService } from 'src/app/services/task-management.service';
@@ -27,6 +28,7 @@ export class StudyProcessComponent implements OnInit {
     private router: Router,
     private taskManagementService: TaskManagementService,
     private educationalProcessService: EducationalProcessService,
+    public authService: AuthorizationService,
     private notificationService: NotificationService) { }
 
   ngOnInit() {
@@ -40,9 +42,14 @@ export class StudyProcessComponent implements OnInit {
   }
 
   private _initializeCourse(courseId: number) {
-    this.educationalProcessService.getCourseById(courseId)
+    this.educationalProcessService.getCourseById(false, courseId)
       .subscribe(course => {
         this.course = course;
+        if (this.course.complete === 100) {
+          this.notificationService.showNotification('Congratulations!',
+            'Course was successfully completed.', NotificationType.SUCCESS);
+          this.router.navigate(['home']);
+        }
       });
   }
 
@@ -64,7 +71,7 @@ export class StudyProcessComponent implements OnInit {
     let currentTask = this.tasks[this.currentTaskNumber];
     switch (currentTask.type) {
       case TaskType.TEXT:
-        this.taskManagementService.getAnswerForTask(courseId, this.currentTaskNumber)
+        this.taskManagementService.getAnswerForTask(courseId, undefined, this.authService.currentUser.userId, this.currentTaskNumber)
           .subscribe(
             answer => {
               this.formAnswer = new FormGroup({
@@ -78,7 +85,7 @@ export class StudyProcessComponent implements OnInit {
             });
         break;
       case TaskType.TEST:
-        this.taskManagementService.getAnswerForTask(courseId, this.currentTaskNumber)
+        this.taskManagementService.getAnswerForTask(courseId, undefined, this.authService.currentUser.userId, this.currentTaskNumber)
           .subscribe(testAnswers => {
             let answers: string[] = testAnswers.answer.split(';');
             answers.forEach(answer => {
@@ -104,11 +111,6 @@ export class StudyProcessComponent implements OnInit {
     let taskNumbers: string[] = Object.keys(this.tasks);
     if (taskNumbers.indexOf(this.currentTaskNumber.toString()) === taskNumbers.length - 1) {
       this._initializeCourse(this.course.id);
-      if (this.course.complete === 100) {
-        this.notificationService.showNotification('Congratulations!',
-          'Course was successfully completed.', NotificationType.SUCCESS);
-      }
-      this.router.navigate(['home']);
       return;
     }
     let nextTaskNumber = taskNumbers[taskNumbers.indexOf(this.currentTaskNumber.toString()) + 1];

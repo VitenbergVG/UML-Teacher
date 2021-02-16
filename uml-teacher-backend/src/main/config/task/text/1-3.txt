@@ -1,5 +1,5 @@
 $QUESTION$
-1121234324535gllglglgregtrgegtrtgrtge?
+Agile - это ...
 
 $CORRECT_ANSWER$
-ergtregegt
+Процессная методология

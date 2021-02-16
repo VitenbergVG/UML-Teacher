@@ -19,8 +19,8 @@ public class MultipleTestCourseTask extends CourseTaskInfo {
 
     List<TestCourseTask> testTasks;
 
-    public MultipleTestCourseTask() {
-        super(TaskType.TEST);
+    public MultipleTestCourseTask(int taskId) {
+        super(TaskType.TEST, taskId);
         testTasks = new ArrayList<>();
     }
 

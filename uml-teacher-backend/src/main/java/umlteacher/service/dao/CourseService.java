@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import umlteacher.exceptions.CourseNotFoundException;
 import umlteacher.exceptions.StudentNotFoundException;
 import umlteacher.model.dao.Course;
+import umlteacher.model.dao.Employee;
 import umlteacher.model.dao.Student;
 import umlteacher.repo.dao.CourseRepository;
+import umlteacher.repo.dao.EmployeeRepository;
 import umlteacher.repo.dao.StudentRepository;
 
 import java.util.List;
@@ -19,6 +21,8 @@ public class CourseService {
 	private CourseRepository courseRepository;
 	@Autowired
 	private StudentRepository studentRepository;
+	@Autowired
+	private EmployeeRepository employeeRepository;
 
 	public Course findCourseById(int course_id) throws CourseNotFoundException {
 		Course course = courseRepository.findById(course_id);
@@ -30,6 +34,11 @@ public class CourseService {
 
 	public List<Course> findAll() {
 		return courseRepository.findAll();
+	}
+
+	public List<Course> findByEmployeeUserId(long id) {
+		Employee employee = employeeRepository.findByUserId(id);
+		return courseRepository.findByEmployeeId(employee.getId());
 	}
 
 	public Set<Course> getCompleted(long user_id) {

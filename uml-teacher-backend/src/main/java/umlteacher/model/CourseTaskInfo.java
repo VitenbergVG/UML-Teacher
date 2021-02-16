@@ -20,5 +20,9 @@ public abstract class CourseTaskInfo {
     @Setter
     private TaskType type;
 
+    @Getter
+    @Setter
+    private int taskId;
+
     public abstract void getTaskFromFile(Path path) throws IOException;
 }

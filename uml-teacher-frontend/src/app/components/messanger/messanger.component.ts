@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserModel } from 'src/app/models/user.model';
+import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 
@@ -10,26 +11,37 @@ import { WebsocketService } from 'src/app/services/websocket.service';
 })
 export class MessangerComponent implements OnInit, OnDestroy {
 
-  public users: UserModel[];
+  public contacts: UserModel[];
+  public activeContact: UserModel;
+  public messages: any[];
 
   constructor(public wsServie: WebsocketService,
-    private chatService: ChatService) { }
+    public chatService: ChatService,
+    public authService: AuthorizationService) { }
 
   ngOnInit() {
-    this.wsServie.connect();
+    // this.wsServie.connect();
+    this.chatService.activeContactSubject.subscribe(contact => this.activeContact = contact);
+
     this.chatService.getUsers().subscribe(users => {
       users.map((contact) => {
-        this.chatService.getCountNewMessages(contact.userId).subscribe(count => {
-          contact.newMessages = count;
-          return contact;
-        });
+        this.chatService.getCountNewMessages(contact.userId)
+          .subscribe(count => {
+            contact.newMessages = count;
+            return contact;
+          });
       });
-      this.users = users;
-      console.log(this.users);
+      this.contacts = users;
+
+      if (this.activeContact === undefined && users.length > 0) {
+        this.chatService.activeContactSubject.next(users[0]);
+        this.chatService.findChatMessages(this.authService.currentUser.userId, users[0].userId)
+          .subscribe(messages => this.messages = messages);
+      }
     });
   }
 
-  ngOnDestroy(): void {
-    this.wsServie.disconnect();
+  ngOnDestroy() {
+    // this.wsServie.disconnect();
   }
 }

@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserDetailsService {
         return user;
     }
 
-    public Long getUserIdByUsernameAndPassword(String authToken)
+    public User getUserByUsernameAndPassword(String authToken)
             throws UsernameNotFoundException, AuthorizationException {
         String decodedToken = new String(Base64.getDecoder()
                 .decode(authToken.replace("Basic ", "")));
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserDetailsService {
         String password = credentials[1];
         User user = (User) loadUserByUsername(username);
         if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            return user.getId();
+            return user;
         }
         throw new AuthorizationException("Incorrect password!");
     }
@@ -89,10 +89,10 @@ public class UserServiceImpl implements UserDetailsService {
         return false;
     }
 
-    public boolean isAdmin(Long userId) throws AuthorizationException {
+    public String getRoleForUser(Long userId) throws AuthorizationException {
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.nonNull(user)) {
-            return user.getRole().getAuthority().equals("ADMIN");
+            return user.getRole().getAuthority();
         }
         throw new AuthorizationException("Couldn't get user role. User doesn't exists!");
     }
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserDetailsService {
         }
     }
 
-    public Long saveUserAndGetId(String authToken, String fullname) throws AuthorizationException {
+    public User saveUser(String authToken, String fullname) throws AuthorizationException {
         String decodedToken = new String(Base64.getDecoder()
                 .decode(authToken.replace("Basic ", "")));
         String[] credentials = decodedToken.split(":");
@@ -126,6 +126,6 @@ public class UserServiceImpl implements UserDetailsService {
         user.setRole(role);
         user.setPassword(bCryptPasswordEncoder.encode(password));
         userRepository.saveAndFlush(user);
-        return user.getId();
+        return user;
     }
 }

@@ -1,7 +1,10 @@
 <div class="course-card">
   <div class="course-card__name-container">
     <div class="course-card__image-container"><img src="assets\icons\graph_icon.svg"></div>
-    <div class="course-card__name text__major _small">{{course.name}}</div>
+    <div>
+      <div class="course-card__name text__major _small">{{course.name}}</div>
+      <div class="course-card__name text _small">{{course.teacher ? 'by ' + course.teacher : ''}}</div>
+    </div>
   </div>
   <div class="d-flex flex-row align-items-center">
     <img class="course-card__icon" src="assets\icons\time.svg">
@@ -9,7 +12,7 @@
     <img class="course-card__icon" src="assets\icons\fire_icon.svg">
     <div class="course-card__rating">{{course.rating || '-'}}</div>
     <button class="btn btn-primary course-card__button" (click)="viewCourse()">
-      View course
+      {{btCourseOperationText}}
     </button>
   </div>
 </div>
