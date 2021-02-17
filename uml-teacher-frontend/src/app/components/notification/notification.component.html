@@ -1,0 +1,9 @@
+<div *ngIf="notification?.isShowed" class="nfc-notification__container">
+  <div class="alert nfc-notification__alert" [ngClass]="{
+    'alert-danger': notification.type === 'ERROR',
+    'alert-warning': notification.type === 'WARNING',
+    'alert-success': notification.type === 'SUCCESS'
+  }" role="alert">
+    <strong>{{notification.title}}</strong> {{notification.text}}
+  </div>
+  <div>

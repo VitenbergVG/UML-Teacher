@@ -1,0 +1,43 @@
+<div class="study-process__container">
+  <div class="study-process__header">
+    <div class="study-process__current-task">
+      <div class="task-card__name-container">
+        <div class="task-card__image-container">
+          <img src="assets\icons\graph_icon.svg">
+        </div>
+        <div *ngIf="answer" class="task-card__name text__major _small">
+          Student {{studentName}} | Course "{{answer.course.name}}" | Task {{taskNumber}}
+        </div>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="task-card__external-button-container">
+          <a class="task-card__external-button"
+            [style.cursor]="(answer | isFirstAnswer : taskManagementService.answersToCheck) ? 'unset' : 'pointer'"
+            (click)="navigateToPrevTask()">
+            <img *ngIf="!(answer | isFirstAnswer : taskManagementService.answersToCheck)"
+              src="assets\icons\arrow-left.svg">
+            <img *ngIf="answer | isFirstAnswer : taskManagementService.answersToCheck"
+              src="assets\icons\arrow-left_disabled.svg">
+          </a>
+          <a class="task-card__external-button"
+            [style.cursor]="(answer | isLastAnswer : taskManagementService.answersToCheck) ? 'unset' : 'pointer'"
+            (click)="navigateToNextTask()">
+            <img *ngIf="!(answer | isLastAnswer : taskManagementService.answersToCheck)"
+              src="assets\icons\arrow-right.svg">
+            <img *ngIf="answer | isLastAnswer : taskManagementService.answersToCheck"
+              src="assets\icons\arrow-right_disabled.svg">
+          </a>
+        </div>
+      </div>
+    </div>
+    <form class="form-inline">
+      <input class="form-control mr-sm-2 study-process__search" type="text" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+  <ng-container *ngIf="studentUserId && answer">
+    <div class="task-content__question text _large _bold">{{question}}</div>
+    <div class="task-content__name text _large _bold">Answer: </div>
+    <uml-editor [courseId]="answer.course.id" [taskNumber]="taskNumber" [studentUserId]="studentUserId">
+    </uml-editor>
+  </ng-container>
+</div>
