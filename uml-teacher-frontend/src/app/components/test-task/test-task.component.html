@@ -1,0 +1,11 @@
+<div class="test-task__container">
+  <span class="text _middle _bold">Q{{taskIndex}}: {{task.question}}</span>
+  <form>
+    <div class="custom-control custom-radio" *ngFor="let answer of task.answers; let i = index;">
+      <input type="radio" [id]="'task' + taskIndex + 'radio' + i" name="answer" class="custom-control-input"
+        (click)="task.enteredAnswer = answer" [checked]="answer === task.enteredAnswer">
+      <label class="custom-control-label text _middle _bold" [for]="'task' + taskIndex + 'radio' + i"
+        name="answer">{{answer}}</label>
+    </div>
+  </form>
+</div>

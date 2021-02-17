@@ -1,0 +1,50 @@
+<div class="home-container">
+  <div class="home-container__left">
+    <div class="home-section __greeting-wrapper _transparent">
+      <div class="home-section __greeting">
+        <div class="d-flex flex-column justify-content-center">
+          <div class="text__major _middle">Hello User!</div>
+          <div>It’s good to see you again.</div>
+        </div>
+      </div>
+      <img class="home-section __greeting-image _transparent" src="assets\icons\Illustration.svg">
+    </div>
+
+    <div class="text__major _regular">Courses</div>
+
+    <nav>
+      <div class="nav nav-tabs text__major _small" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="all-courses-tab" data-toggle="tab" href="#all-courses" role="tab"
+          aria-controls="all-courses" aria-selected="true" (click)="currentCourseSortingType = 'ALL_COURSES'">All
+          Courses</a>
+        <a class="nav-item nav-link" id="the-newest-tab" data-toggle="tab" href="#the-newest" role="tab"
+          aria-controls="the-newest" aria-selected="false" (click)="currentCourseSortingType = 'THE_NEWEST'">The
+          Newest</a>
+        <a class="nav-item nav-link" id="top-rated-tab" data-toggle="tab" href="#top-rated" role="tab"
+          aria-controls="top-rated" aria-selected="false" (click)="currentCourseSortingType = 'TOP_RATED'">Top Rated</a>
+        <a class="nav-item nav-link" id="most-popular-tab" data-toggle="tab" href="#most-popular" role="tab"
+          aria-controls="most-popular" aria-selected="false" (click)="currentCourseSortingType = 'MOST_POPULAR'">Most
+          Popular</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <ng-container *ngFor="let course of courses | sortBy : currentCourseSortingType">
+        <course-preveiw-card [course]="course"></course-preveiw-card>
+      </ng-container>
+    </div>
+
+  </div>
+  <div class="home-container__right">
+    <div class="d-flex flex-row functional-header">
+      <form class="form-inline">
+        <input class="form-control mr-sm-2 home-section __search" type="text" placeholder="Search" aria-label="Search">
+      </form>
+    </div>
+    <div class="d-flex flex-row">
+      <div class="home-section __courses-quantity">
+        <span class="text__major _large mt-3 mr-3">{{courses?.length || 0}}</span>
+        <span>Courses check in progress</span>
+      </div>
+    </div>
+  </div>
+</div>
